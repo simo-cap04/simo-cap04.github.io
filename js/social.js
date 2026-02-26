@@ -28,7 +28,7 @@ function initSocial() {
     // POST 1: Reel (DVJdlQpDHK_)
     const post1 = createStaticInstaCard(
         "https://www.instagram.com/p/DVJdlQpDHK_/",
-        "https://placehold.co/400x480/e2e8f0/64748b?text=Screenshot+Post+1",
+        "images/festa_donna.webp",
         "Post Instagram 1"
     );
 
@@ -54,3 +54,4 @@ function initSocial() {
         lucide.createIcons();
     }
 }
+
