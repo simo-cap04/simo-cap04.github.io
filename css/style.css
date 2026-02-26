@@ -1,0 +1,42 @@
+body { font-family: 'Inter', sans-serif; }
+
+/* Transizioni per il carosello */
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    pointer-events: none;
+    background-color: #cbd5e1; /* fallback */
+}
+.slide.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Transizioni per le "Pagine" */
+.page-section {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+}
+.page-section.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Accordion animazione */
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease;
+}
+.accordion-content.open {
+    max-height: 500px;
+}
