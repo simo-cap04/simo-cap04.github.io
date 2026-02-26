@@ -1,13 +1,15 @@
 // LOGICA REPARTI E SERVIZI PARAFARMACIA
 function initServices() {
     
-    // 1. CARICAMENTO REPARTI
+    // ==========================================
+    // 1. CARICAMENTO REPARTI (Con foto e click per espandere)
+    // ==========================================
     const repartiContainer = document.getElementById('services-grid');
     if (repartiContainer) {
         repartiContainer.innerHTML = '';
         SERVICES.forEach(service => {
             const el = document.createElement('div');
-            el.className = 'bg-white rounded-2xl shadow-sm border border-slate-100 border-t-4 border-t-sky-500 overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col';
+            el.className = 'bg-white rounded-2xl shadow-sm border border-slate-100 border-t-4 border-t-sky-500 overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full';
             
             el.innerHTML = `
                 <div class="h-56 overflow-hidden relative bg-slate-100">
@@ -27,36 +29,43 @@ function initServices() {
         });
     }
 
-    // 2. CARICAMENTO SERVIZI PARAFARMACIA
-   // 2. CARICAMENTO SERVIZI PARAFARMACIA
+    // ==========================================
+    // 2. CARICAMENTO SERVIZI (Con Icone, Testo visibile e NESSUN click)
+    // ==========================================
     const pharmacyContainer = document.getElementById('pharmacy-services-grid');
     if (pharmacyContainer) {
         pharmacyContainer.innerHTML = '';
         PHARMACY_SERVICES.forEach(service => {
             const el = document.createElement('div');
-            // Card con bordo superiore verde smeraldo, senza animazioni di zoom
-            el.className = 'bg-white rounded-2xl shadow-sm border border-slate-100 border-t-4 border-t-emerald-500 hover:shadow-md transition-all duration-300 flex flex-col h-full';
+            el.className = 'h-full';
             
+            // Nuova Card statica ma con animazione al passaggio del mouse
             el.innerHTML = `
-                <div class="p-6 md:p-8 flex flex-col flex-grow">
-                    <div class="flex flex-col sm:flex-row justify-between items-start gap-3 mb-4">
-                        <h3 class="text-xl font-bold text-slate-800">${service.title}</h3>
-                        
-                        <span class="${service.badgeColor} text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-sm whitespace-nowrap">
-                            ${service.badge}
-                        </span>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-default text-center flex flex-col items-center relative overflow-hidden h-full">
+                    
+                    ${service.badge ? `
+                    <span class="${service.badgeColor} absolute top-4 right-4 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-sm uppercase tracking-wider z-10">
+                        ${service.badge}
+                    </span>` : ''}
+                    
+                    <div class="w-20 h-20 bg-sky-50 rounded-full flex items-center justify-center mb-6 group-hover:bg-sky-500 group-hover:scale-110 transition-all duration-500 shadow-inner relative z-10">
+                        <i data-lucide="${service.icon || 'activity'}" class="w-10 h-10 text-sky-500 group-hover:text-white transition-colors duration-300"></i>
                     </div>
                     
-                    <p class="text-slate-600 text-sm leading-relaxed flex-grow">
-                        ${service.details}
+                    <h3 class="text-xl font-bold text-slate-800 mb-3 group-hover:text-sky-600 transition-colors relative z-10">${service.title}</h3>
+                    
+                    <p class="text-slate-500 leading-relaxed text-sm flex-grow relative z-10">
+                        ${service.short}
                     </p>
+                    
+                    <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-sky-50 rounded-full opacity-0 group-hover:opacity-50 transition-opacity duration-500 pointer-events-none"></div>
                 </div>
             `;
             pharmacyContainer.appendChild(el);
         });
     }       
 
-    // Crea il contenitore del modale nel DOM se non esiste già
+    // Crea il contenitore del modale nel DOM se non esiste già (Serve solo per i Reparti)
     if (!document.getElementById('service-modal')) {
         createModalElement();
     }
@@ -67,7 +76,10 @@ function initServices() {
     }
 }
 
-// Funzione per creare la struttura del pannello in sovraimpressione (Modale)
+// ==========================================
+// FUNZIONI PER IL MODALE (Usato solo per i Reparti)
+// ==========================================
+
 function createModalElement() {
     const modal = document.createElement('div');
     modal.id = 'service-modal';
@@ -103,11 +115,8 @@ function createModalElement() {
     document.body.appendChild(modal);
 }
 
-// Funzione per aprire il pannello e caricare i dati (adattata per entrambe le liste)
 function openServiceModal(id, type) {
-    // Sceglie in quale blocco dati cercare in base a cosa è stato cliccato
-    const arrayToSearch = type === 'reparto' ? SERVICES : PHARMACY_SERVICES;
-    const item = arrayToSearch.find(s => s.id === id);
+    const item = SERVICES.find(s => s.id === id);
     if (!item) return;
 
     const modal = document.getElementById('service-modal');
@@ -135,7 +144,6 @@ function openServiceModal(id, type) {
     }
 }
 
-// Funzione per chiudere il pannello
 function closeServiceModal() {
     const modal = document.getElementById('service-modal');
     const backdrop = document.getElementById('service-modal-backdrop');
