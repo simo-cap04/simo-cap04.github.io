@@ -1,45 +1,56 @@
-// LOGICA SOCIAL (3 POST INSTAGRAM)
+// LOGICA SOCIAL (3 POST INSTAGRAM STATICI - ZERO COOKIE)
 function initSocial() {
     const container = document.getElementById('social-grid');
     if (!container) return;
 
-    // Contenitore fisso: altezza 480px, overflow-hidden blocca lo scorrimento
-    const wrapStart = `<div class="w-full max-w-[400px] h-[600px] bg-white rounded-2xl shadow-md border border-slate-100 overflow-hidden relative flex justify-center">`;
-    const wrapEnd = `</div>`;
+    // Funzione per creare una card Instagram statica ed elegante
+    function createStaticInstaCard(link, imageUrl, altText) {
+        return `
+            <a href="${link}" target="_blank" class="block w-full max-w-[400px] h-[480px] bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden relative group border border-slate-100">
+                
+                <img src="${imageUrl}" alt="${altText}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                
+                <div class="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/30 transition-colors duration-300"></div>
+                
+                <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-sm text-pink-600">
+                    <i data-lucide="instagram" class="w-5 h-5"></i>
+                </div>
+                
+                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span class="bg-white text-slate-800 font-bold py-3 px-6 rounded-full shadow-lg flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all">
+                        Vai al post <i data-lucide="external-link" class="w-4 h-4 text-slate-400"></i>
+                    </span>
+                </div>
+            </a>
+        `;
+    }
 
-    // POST 1: Reel (DVJdlQpDHK_) - rimosso data-instgrm-captioned
-    const post1 = wrapStart + `
-        <blockquote class="instagram-media w-full" data-instgrm-permalink="https://www.instagram.com/p/DVJdlQpDHK_/?utm_source=ig_embed&utm_campaign=loading" data-instgrm-version="14" style="background:#FFF; border:0; margin: 0; padding:0; width:100%;">
-        <div style="padding:16px;"> <a href="https://www.instagram.com/p/DVJdlQpDHK_/" target="_blank">Visualizza post</a></div>
-        </blockquote>
-    ` + wrapEnd;
+    // POST 1: Reel (DVJdlQpDHK_)
+    const post1 = createStaticInstaCard(
+        "https://www.instagram.com/p/DVJdlQpDHK_/",
+        "https://placehold.co/400x480/e2e8f0/64748b?text=Screenshot+Post+1",
+        "Post Instagram 1"
+    );
 
-    // POST 2: Immagine (DU8CbR7DCi_) - rimosso data-instgrm-captioned
-    const post2 = wrapStart + `
-        <blockquote class="instagram-media w-full" data-instgrm-permalink="https://www.instagram.com/p/DU8CbR7DCi_/?utm_source=ig_embed&utm_campaign=loading" data-instgrm-version="14" style="background:#FFF; border:0; margin: 0; padding:0; width:100%;">
-        <div style="padding:16px;"> <a href="https://www.instagram.com/p/DU8CbR7DCi_/" target="_blank">Visualizza post</a></div>
-        </blockquote>
-    ` + wrapEnd;
+    // POST 2: Immagine (DU8CbR7DCi_)
+    const post2 = createStaticInstaCard(
+        "https://www.instagram.com/p/DU8CbR7DCi_/",
+        "https://placehold.co/400x480/e2e8f0/64748b?text=Screenshot+Post+2",
+        "Post Instagram 2"
+    );
 
-    // POST 3: Post originale (DT982GjDAOu) - rimosso data-instgrm-captioned
-    const post3 = wrapStart + `
-        <blockquote class="instagram-media w-full" data-instgrm-permalink="https://www.instagram.com/p/DT982GjDAOu/?utm_source=ig_embed&utm_campaign=loading" data-instgrm-version="14" style="background:#FFF; border:0; margin: 0; padding:0; width:100%;">
-        <div style="padding:16px;"> <a href="https://www.instagram.com/p/DT982GjDAOu/" target="_blank">Visualizza post</a></div>
-        </blockquote>
-    ` + wrapEnd;
+    // POST 3: Post originale (DT982GjDAOu)
+    const post3 = createStaticInstaCard(
+        "https://www.instagram.com/p/DT982GjDAOu/",
+        "https://placehold.co/400x480/e2e8f0/64748b?text=Screenshot+Post+3",
+        "Post Instagram 3"
+    );
     
     // Inserisce i 3 post nella griglia
     container.innerHTML = post1 + post2 + post3;
-
-    // Richiama lo script ufficiale di Instagram per trasformare il codice nei riquadri visivi
-    if (!document.querySelector('script[src="//www.instagram.com/embed.js"]')) {
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = "//www.instagram.com/embed.js";
-        document.body.appendChild(script);
-    } else {
-        if (window.instgrm) {
-            window.instgrm.Embeds.process();
-        }
+    
+    // Ricarica le icone (fondamentale quando si inietta HTML nuovo)
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
     }
 }
