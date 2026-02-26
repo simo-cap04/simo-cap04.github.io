@@ -87,44 +87,39 @@ const SERVICES = [
 ];
 
 
-// 3. DATI SERVIZI PARAFARMACIA (Gratuiti e a pagamento)
 const PHARMACY_SERVICES = [
     {
         id: 101,
         title: "Misurazione Pressione",
-        short: "Controllo rapido e preciso dei tuoi valori pressori.",
-        details: "Offriamo la misurazione della pressione arteriosa con strumentazione elettronica professionale. Un monitoraggio costante è un ottimo strumento di prevenzione cardiovascolare e ti aiutiamo a tenere traccia dei tuoi valori nel tempo.",
-        image: "https://placehold.co/600x400/e2e8f0/64748b?text=Misurazione+Pressione",
+        short: "Offriamo la misurazione della pressione arteriosa con strumentazione elettronica professionale. Un monitoraggio costante è un ottimo strumento di prevenzione cardiovascolare e ti aiutiamo a tenere traccia dei tuoi valori nel tempo.",
+        icon: "activity", // Disegno: Tracciato battito cardiaco
         badge: "Gratuito",
-        badgeColor: "bg-emerald-500" // Verde per i gratuiti
+        badgeColor: "bg-emerald-500" // Verde
     },
     {
         id: 102,
         title: "Consegna a Domicilio",
-        short: "Ricevi comodamente a casa i tuoi prodotti e farmaci.",
-        details: "Per agevolare chi ha difficoltà a muoversi o non può recarsi fisicamente in parafarmacia, offriamo un servizio di consegna a domicilio per i paesi limitrofi. Contattaci telefonicamente o su WhatsApp per prenotare i tuoi prodotti e accordarci per la consegna.",
-        image: "https://placehold.co/600x400/e2e8f0/64748b?text=Consegna+Domicilio",
+        short: "Per agevolare chi ha difficoltà a muoversi o non può recarsi fisicamente in parafarmacia, offriamo un servizio di consegna a domicilio per i paesi limitrofi. Contattaci telefonicamente o su WhatsApp per prenotare i tuoi prodotti e accordarci per la consegna.",
+        icon: "truck", // Disegno: Furgoncino
         badge: "Gratuito",
-        badgeColor: "bg-emerald-500" // Verde per i gratuiti
+        badgeColor: "bg-emerald-500" // Verde
     },
     {
         id: 103,
         title: "Bilancia Pesapersone",
-        short: "Misurazione precisa del peso corporeo e dell'altezza.",
-        details: "Mettiamo a disposizione dei nostri clienti una bilancia pesapersone professionale con altimetro integrato. Uno strumento preciso per monitorare la tua forma fisica o per seguire l'andamento del tuo peso durante un percorso nutrizionale.",
-        image: "https://placehold.co/600x400/e2e8f0/64748b?text=Bilancia+Pesapersone",
+        short: "Mettiamo a disposizione dei nostri clienti una bilancia pesapersone professionale con altimetro integrato. Uno strumento preciso per monitorare la tua forma fisica o per seguire l'andamento del tuo peso durante un percorso nutrizionale.",
+        icon: "scale", // Disegno: Bilancia per il peso corporeo
         badge: "Gratuito",
-        badgeColor: "bg-emerald-500" // Arancione per quelli a pagamento
+        badgeColor: "bg-emerald-500" // Verde
     },
     {
         id: 104,
         title: "Foratura Lobi",
-        short: "Servizio sicuro, igienico e quasi indolore.",
-        details: "Effettuiamo la foratura dei lobi auricolari utilizzando esclusivamente sistemi monouso sterili a capsula. Ideale anche per i bambini, con una vasta scelta di orecchini ipoallergenici in materiale biocompatibile e nichel-safe. Su prenotazione",
-        image: "https://placehold.co/600x400/e2e8f0/64748b?text=Foratura+Lobi",
+        short: "Effettuiamo la foratura dei lobi auricolari utilizzando esclusivamente sistemi monouso sterili a capsula. Ideale anche per i bambini, con una vasta scelta di orecchini ipoallergenici in materiale biocompatibile e nichel-safe. Su prenotazione.",
+        icon: "gem", // Disegno: Diamante/Gioiello
         badge: "A pagamento",
-        badgeColor: "bg-amber-500" // Arancione per quelli a pagamento
+        badgeColor: "bg-amber-500" // Arancione
     }
-
 ];
+
 
