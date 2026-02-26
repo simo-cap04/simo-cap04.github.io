@@ -35,7 +35,7 @@ function initSocial() {
     // POST 2: Immagine (DU8CbR7DCi_)
     const post2 = createStaticInstaCard(
         "https://www.instagram.com/p/DU8CbR7DCi_/",
-        "https://placehold.co/400x480/e2e8f0/64748b?text=Screenshot+Post+2",
+        "image/consulenza.webp",
         "Post Instagram 2"
     );
 
@@ -54,4 +54,5 @@ function initSocial() {
         lucide.createIcons();
     }
 }
+
 
