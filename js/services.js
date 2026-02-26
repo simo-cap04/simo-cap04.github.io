@@ -2,7 +2,7 @@
 function initServices() {
     
     // ==========================================
-    // 1. CARICAMENTO REPARTI (Con foto e click per espandere)
+    // 1. CARICAMENTO REPARTI (Con foto e click)
     // ==========================================
     const repartiContainer = document.getElementById('services-grid');
     if (repartiContainer) {
@@ -30,7 +30,7 @@ function initServices() {
     }
 
     // ==========================================
-    // 2. CARICAMENTO SERVIZI (Con Icone, Testo visibile e NESSUN click)
+    // 2. CARICAMENTO SERVIZI (Icone, Niente Click, Testo breve e pulito)
     // ==========================================
     const pharmacyContainer = document.getElementById('pharmacy-services-grid');
     if (pharmacyContainer) {
@@ -65,12 +65,12 @@ function initServices() {
         });
     }       
 
-    // Crea il contenitore del modale nel DOM se non esiste già (Serve solo per i Reparti)
+    // Crea il contenitore del modale nel DOM se non esiste già
     if (!document.getElementById('service-modal')) {
         createModalElement();
     }
 
-    // Re-inizializza le icone
+    // Forza il ricaricamento delle icone vettoriali per renderle visibili
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
