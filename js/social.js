@@ -8,7 +8,13 @@ function initSocial() {
         return `
             <a href="${link}" target="_blank" class="block w-full max-w-[400px] h-[480px] bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden relative group border border-slate-100">
                 
-                <img src="${imageUrl}" alt="${altText}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+              <div class="flex items-center justify-center h-full p-2 bg-slate-50"> <img 
+        src="${imageUrl}" 
+        alt="${altText}" 
+        class="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-700" 
+        onerror="this.src='https://placehold.co/400x480?text=Instagram+Post';"
+    >
+</div>
                 
                 <div class="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/30 transition-colors duration-300"></div>
                 
@@ -54,5 +60,6 @@ function initSocial() {
         lucide.createIcons();
     }
 }
+
 
 
