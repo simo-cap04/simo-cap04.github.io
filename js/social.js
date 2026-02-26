@@ -47,8 +47,8 @@ function initSocial() {
 
     // POST 3: Post originale (DT982GjDAOu)
     const post3 = createStaticInstaCard(
-        "https://www.instagram.com/p/DT982GjDAOu/",
-        "https://placehold.co/400x480/e2e8f0/64748b?text=Screenshot+Post+3",
+        "https://www.instagram.com/p/DVN7ZwfDH-N/",
+        "images/voltaren.webp",
         "Post Instagram 3"
     );
     
@@ -60,6 +60,7 @@ function initSocial() {
         lucide.createIcons();
     }
 }
+
 
 
 
