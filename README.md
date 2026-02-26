@@ -1,1 +1,0 @@
-# simo-cap04.github.io
