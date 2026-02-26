@@ -113,8 +113,8 @@ const PHARMACY_SERVICES = [
         short: "Misurazione precisa del peso corporeo e dell'altezza.",
         details: "Mettiamo a disposizione dei nostri clienti una bilancia pesapersone professionale con altimetro integrato. Uno strumento preciso per monitorare la tua forma fisica o per seguire l'andamento del tuo peso durante un percorso nutrizionale.",
         image: "https://placehold.co/600x400/e2e8f0/64748b?text=Bilancia+Pesapersone",
-        badge: "A pagamento",
-        badgeColor: "bg-amber-500" // Arancione per quelli a pagamento
+        badge: "Gratuito",
+        badgeColor: "bg-emerald-500" // Arancione per quelli a pagamento
     },
     {
         id: 104,
@@ -127,3 +127,4 @@ const PHARMACY_SERVICES = [
     }
 
 ];
+
