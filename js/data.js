@@ -120,9 +120,10 @@ const PHARMACY_SERVICES = [
         id: 104,
         title: "Foratura Lobi",
         short: "Servizio sicuro, igienico e quasi indolore.",
-        details: "Effettuiamo la foratura dei lobi auricolari utilizzando esclusivamente sistemi monouso sterili a capsula. Ideale anche per i bambini, con una vasta scelta di orecchini ipoallergenici in materiale biocompatibile e nichel-safe.",
+        details: "Effettuiamo la foratura dei lobi auricolari utilizzando esclusivamente sistemi monouso sterili a capsula. Ideale anche per i bambini, con una vasta scelta di orecchini ipoallergenici in materiale biocompatibile e nichel-safe. Su prenotazione",
         image: "https://placehold.co/600x400/e2e8f0/64748b?text=Foratura+Lobi",
         badge: "A pagamento",
         badgeColor: "bg-amber-500" // Arancione per quelli a pagamento
     }
+
 ];
