@@ -41,7 +41,7 @@ function initSocial() {
     // POST 2: Immagine (DU8CbR7DCi_)
     const post2 = createStaticInstaCard(
         "https://www.instagram.com/p/DU8CbR7DCi_/",
-        "image/consulenza.webp",
+        "images/consulenza.webp",
         "Post Instagram 2"
     );
 
@@ -60,6 +60,7 @@ function initSocial() {
         lucide.createIcons();
     }
 }
+
 
 
 
