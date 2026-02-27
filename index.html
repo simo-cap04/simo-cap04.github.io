@@ -250,45 +250,56 @@
                                 <h2 class="text-3xl font-bold text-slate-800 mb-6">Contattaci</h2>
                                 <p class="text-slate-600 mb-8">Siamo qui per rispondere a tutte le tue domande.</p>
                             </div>
-                            <div class="grid gap-6">
+<div class="grid gap-4 sm:gap-6 w-full max-w-full">
                                 
-                                <div class="flex items-start gap-4 p-6 bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group">
-                                    <div class="p-3 bg-sky-100 text-sky-600 rounded-lg group-hover:bg-sky-600 group-hover:text-white transition-colors"><i data-lucide="map-pin"></i></div>
-                                    <div>
+                                <div class="flex items-start gap-3 sm:gap-4 p-4 sm:p-6 bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group">
+                                    <div class="p-3 bg-sky-100 text-sky-600 rounded-lg group-hover:bg-sky-600 group-hover:text-white transition-colors shrink-0">
+                                        <i data-lucide="map-pin"></i>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
                                         <h3 class="font-bold text-slate-800">Dove Siamo</h3>
-                                        <a href="https://maps.google.com/?q=Via+Roma+100+10025+Pino+Torinese+TO" target="_blank" class="text-slate-600 hover:text-sky-600 transition-colors block">
+                                        <a href="https://maps.google.com/?q=Via+Roma+100+10025+Pino+Torinese+TO" target="_blank" class="text-slate-600 hover:text-sky-600 transition-colors block leading-tight sm:leading-normal">
                                             Via Roma, 100, 10025 Pino Torinese (TO)
                                         </a>
                                     </div>
                                 </div>
                                 
-                                <div class="flex items-start gap-4 p-6 bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group">
-                                    <div class="p-3 bg-sky-100 text-sky-600 rounded-lg group-hover:bg-sky-600 group-hover:text-white transition-colors"><i data-lucide="phone"></i></div>
-                                    <div>
+                                <div class="flex items-start gap-3 sm:gap-4 p-4 sm:p-6 bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group">
+                                    <div class="p-3 bg-sky-100 text-sky-600 rounded-lg group-hover:bg-sky-600 group-hover:text-white transition-colors shrink-0">
+                                        <i data-lucide="phone"></i>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
                                         <h3 class="font-bold text-slate-800">Telefono</h3>
-                                        <a href="tel:011840819" class="text-slate-600 hover:text-sky-600 transition-colors">011 840819</a>
+                                        <a href="tel:011840819" class="text-slate-600 hover:text-sky-600 transition-colors block truncate">011 840819</a>
                                     </div>
                                 </div>
                                 
-                                <div class="flex items-start gap-4 p-6 bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group">
-                                    <div class="p-3 bg-green-100 text-green-600 rounded-lg group-hover:bg-green-600 group-hover:text-white transition-colors"><i data-lucide="message-circle"></i></div>
-                                    <div>
+                                <div class="flex items-start gap-3 sm:gap-4 p-4 sm:p-6 bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group">
+                                    <div class="p-3 bg-green-100 text-green-600 rounded-lg group-hover:bg-green-600 group-hover:text-white transition-colors shrink-0">
+                                        <i data-lucide="message-circle"></i>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
                                         <h3 class="font-bold text-slate-800">WhatsApp</h3>
-                                        <a href="https://wa.me/393333243913" target="_blank" class="text-slate-600 hover:text-green-600 font-medium transition-colors flex items-center gap-2">
-                                            333 3243913 <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Scrivici!</span>
+                                        <a href="https://wa.me/393333243913" target="_blank" class="text-slate-600 hover:text-green-600 font-medium transition-colors flex flex-wrap items-center gap-2">
+                                            333 3243913 <span class="text-[10px] sm:text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full whitespace-nowrap mt-1 sm:mt-0">Scrivici!</span>
                                         </a>
                                     </div>
                                 </div>
                                 
-                                <div class="flex items-start gap-4 p-6 bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group">
-                                    <div class="p-3 bg-sky-100 text-sky-600 rounded-lg group-hover:bg-sky-600 group-hover:text-white transition-colors"><i data-lucide="mail"></i></div>
-                                    <div>
+                                <div class="flex items-start gap-3 sm:gap-4 p-4 sm:p-6 bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group">
+                                    <div class="p-3 bg-sky-100 text-sky-600 rounded-lg group-hover:bg-sky-600 group-hover:text-white transition-colors shrink-0">
+                                        <i data-lucide="mail"></i>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
                                         <h3 class="font-bold text-slate-800">Email</h3>
-                                        <a href="mailto:farmahousepinots@gmail.com" class="text-slate-600 hover:text-sky-600 transition-colors">farmahousepinots@gmail.com</a>
+                                        <a href="mailto:farmahousepinots@gmail.com" class="text-slate-600 hover:text-sky-600 transition-colors block break-all">farmahousepinots@gmail.com</a>
                                     </div>
                                 </div>
                                 
                             </div>
+                            ```
+
+Con questo codice, l'indirizzo email andrà automaticamente a capo sul telefono senza espandere la pagina a destra, e i riquadri si stringeranno il giusto per restare perfettamente all'interno dello schermo. Salva, provalo da mobile e vedrai che ora lo scorrimento orizzontale è bloccato al 100%!
                         </div>
                         
                         <div class="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden h-full min-h-[450px]">
@@ -383,6 +394,7 @@
 </body>
 
 </html>
+
 
 
 
