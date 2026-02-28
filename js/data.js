@@ -54,7 +54,7 @@ const SERVICES = [
         image: CAROUSEL_SLIDES[1].image,
         title: CAROUSEL_SLIDES[1].title,
         short: CAROUSEL_SLIDES[1].subtitle,
-        details: "L'omeopatia offre un approccio dolce e naturale per il trattamento di diverse problematiche fisiche ed emotive. Presso la nostra parafarmacia puoi trovare un'ampia selezione di rimedi omeopatici, dai granuli alle gocce. Ti offriamo consulenze personalizzate per aiutarti a ristabilire il tuo naturale equilibrio.
+        details: "L'omeopatia offre un approccio dolce e naturale per il trattamento di diverse problematiche fisiche ed emotive. Presso la nostra parafarmacia puoi trovare un'ampia selezione di rimedi omeopatici, dai granuli alle gocce. Ti offriamo consulenze personalizzate per aiutarti a ristabilire il tuo naturale equilibrio."
     },
     {
         id: 3,
@@ -121,6 +121,7 @@ const PHARMACY_SERVICES = [
         badgeColor: "bg-amber-500" // Arancione
     }
 ];
+
 
 
 
