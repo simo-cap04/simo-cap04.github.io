@@ -54,14 +54,14 @@ const SERVICES = [
         image: CAROUSEL_SLIDES[1].image,
         title: CAROUSEL_SLIDES[1].title,
         short: CAROUSEL_SLIDES[1].subtitle,
-        details: "L'omeopatia offre un approccio dolce e naturale per il trattamento di diverse problematiche fisiche ed emotive. Presso la nostra parafarmacia puoi trovare un'ampia selezione di rimedi omeopatici, dai granuli alle gocce. Ti offriamo consulenze personalizzate per aiutarti a ristabilire il tuo naturale equilibrio, affiancando o integrando le terapie tradizionali con soluzioni prive di effetti collaterali."
+        details: "L'omeopatia offre un approccio dolce e naturale per il trattamento di diverse problematiche fisiche ed emotive. Presso la nostra parafarmacia puoi trovare un'ampia selezione di rimedi omeopatici, dai granuli alle gocce. Ti offriamo consulenze personalizzate per aiutarti a ristabilire il tuo naturale equilibrio.
     },
     {
         id: 3,
         image: CAROUSEL_SLIDES[2].image,
         title: CAROUSEL_SLIDES[2].title,
         short: CAROUSEL_SLIDES[2].subtitle,
-        details: "Crediamo fortemente nel potere curativo della natura. Il nostro reparto fitoterapico è ricco di estratti secchi, tinture madri, oli essenziali, integratori e tisane. Affidati alla nostra competenza per trovare rimedi naturali, sicuri ed efficaci per affrontare piccoli disturbi quotidiani come insonnia, problemi digestivi, stress o un calo delle difese immunitarie."
+        details: "Il nostro reparto fitoterapico offre una selezione accurata di estratti secchi, tinture madri, oli essenziali, integratori e tisane di alta qualità. Affidati alla nostra competenza per scoprire come le proprietà delle piante possano supportare l'organismo nel gestire i piccoli disturbi quotidiani. Che si tratti di ritrovare il riposo notturno, favorire la digestione, contrastare lo stress o sostenere le difese immunitarie, ti guideremo nella scelta del rimedio naturale più indicato per le tue specifiche necessità."
     },
     {
         id: 4,
@@ -121,5 +121,6 @@ const PHARMACY_SERVICES = [
         badgeColor: "bg-amber-500" // Arancione
     }
 ];
+
 
 
