@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlgoTrainer</title>
+    
+    <!-- Tailwind CSS per lo stile grafico -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM (Librerie di base) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel (Compilatore per far capire a Chrome il codice React) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- FontAwesome per le icone (sostituisce Lucide in questa versione HTML) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Personalizzazioni scrollbar per farla sembrare un editor moderno */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1e1e1e; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        
+        body, html { margin: 0; padding: 0; height: 100%; }
+        #root { height: 100%; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 font-sans h-screen overflow-hidden">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // Estraiamo gli hook da React Globale
+        const { useState, useEffect, useRef } = React;
+
+        // Inserimento diretto di tutti gli algoritmi forniti
+        const algorithmsData = [
+          { id: "Bandiera", name: "Bandiera", signature: "void Bandiera(Color B[], int n)", solution: `void Bandiera(Color B[], int n) {\n    int i = 0;\n    int k = n - 1;\n\n    for (int j = 0; j <= k; j++) {\n        if (B[j] == verde) {\n            swap(B, j, i);\n            i++;\n        } else if (B[j] == rosso) {\n            swap(B, j, k);\n            k--;\n            j--;\n        }\n    }\n}` },
+          { id: "countBubbleSort", name: "countBubbleSort", signature: "int countBubbleSort(int A[], int n)", solution: `int countBubbleSort(int A[], int n) {\n    int flag;\n    int confronti = 0;\n\n    for (int i = 0; i < n - 1; i++) {\n        flag = 0;\n        for (int j = 0; j < n - i - 1; j++) {\n            confronti++;\n            if (A[j] > A[j + 1]) {\n                swap(A, j, j + 1);\n                flag = 1;\n            }\n        }\n        if (flag == 0)\n            break;\n    }\n    return confronti;\n}` },
+          { id: "find", name: "QuickSelect (find)", signature: "int find(int A[], int N, int f)", solution: `int find(int A[], int N, int f) {\n    int LEFT = 0;\n    int RIGHT = N - 1;\n    while (LEFT < RIGHT) {\n        int left = LEFT;\n        int right = RIGHT;\n        int r = A[f];\n        while (left <= right) {\n            while (A[left] < r) left++;\n            while (r < A[right]) right--;\n            if (left <= right) {\n                swap(A, left, right);\n                left++;\n                right--;\n            }\n        }\n        if (f <= right)\n            RIGHT = right;\n        else if (f >= left)\n            LEFT = left;\n        else\n            break;\n    }\n    return A[f];\n}` },
+          { id: "mergeList", name: "mergeList", signature: "list mergeList(list l, list m)", solution: `list mergeList(list l, list m) {\n    if (l == NULL) {\n        return m;\n    } else if (m == NULL) {\n        return l;\n    } else {\n        if (l->info <= m->info) {\n            l->next = mergeList(l->next, m);\n            return l;\n        } else {\n            m->next = mergeList(m->next, l);\n            return m;\n        }\n    }\n}` },
+          { id: "mergeListNonDistruttiva", name: "mergeListNonDistruttiva", signature: "list mergeListNonDistruttiva(list l, list m)", solution: `list mergeListNonDistruttiva(list l, list m) {\n    if (l == NULL) {\n        return m;\n    } else if (m == NULL) {\n        return l;\n    } else if (l->info <= m->info) {\n        return Cons(l->info, mergeListNonDistruttiva(l->next, m));\n    } else {\n        return Cons(m->info, mergeListNonDistruttiva(l, m->next));\n    }\n}` },
+          { id: "merge", name: "merge (Array)", signature: "void merge(int A[], int a, int p, int b)", solution: `void merge(int A[], int a, int p, int b) {\n    int n1 = p - a + 1;\n    int n2 = b - p;\n    int* L = (int*)malloc(n1 * sizeof(int));\n    int* R = (int*)malloc(n2 * sizeof(int));\n    arraycpy(A, a, p, L, 0);\n    arraycpy(A, p + 1, b, R, 0);\n    int i = 0, j = 0, k = a;\n    while (i < n1 && j < n2) {\n        if (L[i] <= R[j]) { A[k] = L[i]; i++; }\n        else { A[k] = R[j]; j++; }\n        k++;\n    }\n    while (i < n1) { A[k] = L[i]; k++; i++; }\n    while (j < n2) { A[k] = R[j]; k++; j++; }\n    free(L);\n    free(R);\n}` },
+          { id: "mergeSort", name: "mergeSort (List)", signature: "list mergeSort(list l)", solution: `list mergeSort(list l) {\n    if (l == NULL) return l;\n    else if (l->next == NULL) return l;\n    else {\n        list m = split(l);\n        l = mergeSort(l);\n        m = mergeSort(m);\n        return mergeList(l, m);\n    }\n}` },
+          { id: "Partition", name: "Partition", signature: "int Partition(int A[], int p, int r)", solution: `int Partition(int A[], int p, int r) {\n    int x = A[p];\n    int i = p + 1;\n    int j = r;\n    while (i <= j) {\n        if (A[i] <= x) i = i + 1;\n        else if (A[j] > x) j = j - 1;\n        else {\n            swap(A, i, j);\n            i = i + 1;\n            j = j - 1;\n        }\n    }\n    swap(A, p, i - 1);\n    return i - 1;\n}` },
+          { id: "dicotomicSearchRec", name: "dicotomicSearchRec", signature: "int dicotomicSearchRec(int A[], int i, int j, int target)", solution: `int dicotomicSearchRec(int A[], int i, int j, int target) {\n    int m = (i + j) / 2;\n    if (i > j) return -1;\n    else if (A[m] == target) return m;\n    else if (target > A[m]) return dicotomicSearchRec(A, m + 1, j, target);\n    else return dicotomicSearchRec(A, i, m - 1, target);\n}` },
+          { id: "binomialRec", name: "binomialRec", signature: "int binomialRec(int n, int k)", solution: `int binomialRec(int n, int k) {\n    if (k == 0 || n == k) return 1;\n    else return binomialRec(n - 1, k - 1) + binomialRec(n - 1, k);\n}` },
+          { id: "binomialBottUp", name: "binomialBottUp", signature: "int binomialBottUp(int n, int k)", solution: `int binomialBottUp(int n, int k) {\n    int mat[n + 1][k + 1];\n    for (int i = 0; i < n + 1; i++) {\n        for (int j = 0; j < k + 1; j++) {\n            if (j == 0 || j == i) mat[i][j] = 1;\n            else mat[i][j] = -1;\n        }\n    }\n    for (int i = 0; i < n + 1; i++) {\n        for (int j = 0; j < k + 1; j++) {\n            if (j != 0 && j != i)\n                mat[i][j] = mat[i - 1][j - 1] + mat[i - 1][j];\n        }\n    }\n    return mat[n][k];\n}` },
+          { id: "binomialNoMem", name: "binomialNoMem", signature: "int binomialNoMem(int n, int k)", solution: `int binomialNoMem(int n, int k) {\n    int res = 0;\n    for (int i = 0; i < k + 1; i++) {\n        if (i == 0 || n == i) res += 1;\n        else res = (res * (n - i + 1)) / i;\n    }\n    return res;\n}` },
+          { id: "distance", name: "Edit Distance", signature: "Matrix distance(char* X, char* Y)", solution: `Matrix distance(char* X, char* Y) {\n    int m = strlen(X);\n    int n = strlen(Y);\n    Matrix D = newMatrix(m + 1, n + 1);\n    for (int i = 0; i <= m; i++) D->array[i][0] = i;\n    for (int j = 0; j <= n; j++) D->array[0][j] = j;\n    for (int i = 1; i <= m; i++)\n        for (int j = 1; j <= n; j++)\n            if (X[i - 1] == Y[j - 1])\n                D->array[i][j] = D->array[i - 1][j - 1];\n            else\n                D->array[i][j] = 1 + min(D->array[i][j - 1], min(D->array[i - 1][j], D->array[i - 1][j - 1]));\n    return D;\n}` },
+          { id: "deleteAll", name: "deleteAll", signature: "list deleteAll(int n, list as)", solution: `list deleteAll(int n, list as) {\n    if (as == NULL) return as;\n    else {\n        if (as->info == n) return deleteAll(n, as->next);\n        else {\n            as->next = deleteAll(n, as->next);\n            return as;\n        }\n    }\n}` },
+          { id: "symmDiff", name: "symmDiff", signature: "list symmDiff(list xs, list ys)", solution: `list symmDiff(list xs, list ys) {\n    if (xs == NULL) return copyList(ys);\n    else if (ys == NULL) return copyList(xs);\n    else if (xs->info == ys->info) return symmDiff(xs->next, ys->next);\n    else if (xs->info < ys->info) return Cons(xs->info, symmDiff(xs->next, ys));\n    else return Cons(ys->info, symmDiff(xs, ys->next));\n}` },
+          { id: "insertList", name: "insertList", signature: "list insertList(list as, list bs, int n)", solution: `list insertList(list as, list bs, int n) {\n    if (n == 0) return concat(as, bs);\n    else {\n        bs->next = insertList(as, bs->next, n - 1);\n        return bs;\n    }\n}` },
+          { id: "insertHeapMin", name: "insertHeapMin", signature: "bool insertHeapMin(Heap H, int k)", solution: `bool insertHeapMin(Heap H, int k) {\n    if (H->hd == H->dim) return false;\n    else {\n        H->keys[H->hd] = k;\n        H->hd++;\n        int i = H->hd - 1;\n        while (i > 0 && H->keys[i] < H->keys[parent(H, i)]) {\n            swap(H->keys, i, parent(H, i));\n            i = parent(H, i);\n        }\n        return true;\n    }\n}` },
+          { id: "corank", name: "corank", signature: "int corank(list l)", solution: `int corankAux(list l, int tot) {\n    if (l == NULL) return tot;\n    else {\n        tot = tot + l->info;\n        l->info = tot;\n        return corankAux(l->next, tot);\n    }\n}\nint corank(list l) { return corankAux(l, 0); }` },
+          { id: "rank", name: "rank", signature: "int rank(list l)", solution: `int rank(list l) {\n    if (l == NULL) return 0;\n    else {\n        l->info = l->info + rank(l->next);\n        return l->info;\n    }\n}` },
+          { id: "fast_reverse", name: "fast_reverse", signature: "list fast_reverse(list l)", solution: `list fast_reverseAux(list l, list appoggio) {\n    if (l == NULL) return appoggio;\n    else return fast_reverseAux(l->next, Cons(l->info, appoggio));\n}\nlist fast_reverse(list l) { return fast_reverseAux(l, NULL); }` },
+          { id: "height", name: "height (kTree)", signature: "int height(kTree t)", solution: `int height(kTree t) {\n    if (t->child == NULL) return 0;\n    else {\n        int tot = 0;\n        kTree v = t->child;\n        while (v != NULL) {\n            tot = max(tot, height(v));\n            v = v->sibling;\n        }\n        return tot + 1;\n    }\n}` },
+          { id: "sumLeaf", name: "sumLeaf", signature: "int sumLeaf(kTree t)", solution: `int sumLeaf(kTree t) {\n    if (t == NULL) return 0;\n    else if (t->child == NULL) return t->key;\n    else {\n        kTree v = t->child;\n        int sum = 0;\n        while (v) {\n            sum += sumLeaf(v);\n            v = v->sibling;\n        }\n        return sum;\n    }\n}` },
+          { id: "kTreeBFS", name: "kTreeBFS", signature: "list kTreeBFS(kTree t)", solution: `list kTreeBFS(kTree t) {\n    if (t == NULL) return NULL;\n    queue q = NewQueue();\n    EnQueue(t, q);\n    list l = NULL;\n    while (!isEmptyQueue(q)) {\n        kTree node = DeQueue(q);\n        l = Cons(node->key, l);\n        node = node->child;\n        while (node) {\n            EnQueue(node, q);\n            node = node->sibling;\n        }\n    }\n    return reverse(l);\n}` },
+          { id: "isOrdered", name: "isOrdered (BTree)", signature: "bool isOrdered(btree bt)", solution: `Triple isOrderedBTreeAux(btree bt) {\n    Triple t;\n    t.isOrdered = true;\n    t.min = bt->key;\n    t.max = bt->key;\n\n    if (bt->right) {\n        Triple check_right = isOrderedBTreeAux(bt->right);\n        if (check_right.isOrdered && bt->key <= check_right.min) t.max = check_right.max;\n        else t.isOrdered = false;\n    }\n    if (bt->left) {\n        Triple check_left = isOrderedBTreeAux(bt->left);\n        if (check_left.isOrdered && bt->key >= check_left.max) t.min = check_left.min;\n        else t.isOrdered = false;\n    }\n    return t;\n}\nbool isOrdered(btree bt) {\n    if (!bt) return true;\n    Triple ret = isOrderedBTreeAux(bt);\n    return ret.isOrdered;\n}` },
+          { id: "heapSort", name: "heapSort", signature: "void heapSort(int A[], int dim)", solution: `void maxHeapify(int H[], int i, int hd) {\n    int leftindex = left(i, hd);\n    int rightindex = right(i, hd);\n    int max = i;\n    if (leftindex != i && H[leftindex] > H[max]) max = leftindex;\n    if (rightindex != i && H[rightindex] > H[max]) max = rightindex;\n    if (max != i) {\n        swap(H, i, max);\n        maxHeapify(H, max, hd);\n    }\n}\nvoid buildMaxHeap(int A[], int dim) {\n    int m = dim / 2 + 1;\n    for (int i = m; i >= 0; i--) maxHeapify(A, i, dim);\n}\nvoid heapSort(int A[], int dim) {\n    buildMaxHeap(A, dim - 1);\n    for (int i = dim - 1; i > 0; i--) {\n        swap(A, 0, i);\n        maxHeapify(A, 0, i - 1);\n    }\n}` },
+          { id: "hashSearch", name: "hashSearch", signature: "int hashSearch(HashTable T, int k)", solution: `int hashSearch(HashTable T, int k) {\n    for (int i = 0; i < T->dim; i++) {\n        int pos = linearProbing(k, i, T->dim);\n        if (T->array[pos] == k) return k;\n        else if (T->array[pos] == -1) return -1;\n    }\n    return -2;\n}` },
+          { id: "split", name: "split", signature: "list split(list l)", solution: `list split(list l) {\n    list slow = l;\n    list fast = l->next;\n    while (fast && fast->next) {\n        slow = slow->next;\n        fast = fast->next->next;\n    }\n    list ret = slow->next;\n    slow->next = NULL;\n    return ret;\n}` },
+          { id: "palindrome", name: "palindrome", signature: "bool palindrome(list l)", solution: `bool equal(list l, list r) {\n    if (l == NULL) return (r == NULL);\n    else if (r == NULL) return false;\n    else if (l->info == r->info) return true && equal(l->next, r->next);\n    else return false;\n}\nbool palindrome(list l) {\n    if (l == NULL) return true;\n    else {\n        list reversed = fast_reverse(l);\n        return equal(l, reversed);\n    }\n}` },
+          { id: "expIter", name: "expIter", signature: "int expIter(int x, int n)", solution: `int expIter(int x, int n) {\n    int z = 1;\n    while (n > 0) {\n        if (n % 2 == 1) z = z * x;\n        x = x * x;\n        n = n / 2;\n    }\n    return z;\n}` }
+        ];
+
+        const CodeWorkspace = ({ algorithm, userCode, onChange, readOnly = false, showSolutionToggle = true }) => {
+          const [showSolution, setShowSolution] = useState(false);
+
+          useEffect(() => {
+            setShowSolution(false);
+          }, [algorithm]);
+
+          if (!algorithm) {
+            return (
+              <div className="flex-1 flex flex-col items-center justify-center bg-slate-900 text-slate-400 p-8 rounded-lg border border-slate-800 border-dashed">
+                <i className="fas fa-brain text-5xl mb-4 opacity-20"></i>
+                <h3 className="text-xl font-semibold text-slate-300">Nessun algoritmo selezionato</h3>
+                <p className="mt-2 text-center max-w-md">Seleziona una funzione dal menu a sinistra per iniziare a scriverne l'implementazione.</p>
+              </div>
+            );
+          }
+
+          return (
+            <div className="flex-1 flex flex-col h-full bg-slate-950 rounded-lg overflow-hidden border border-slate-800 shadow-xl">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-900/50">
+                <div>
+                  <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
+                    <i className="fas fa-book-open text-indigo-400 text-sm"></i>
+                    {algorithm.name}
+                  </h2>
+                  <code className="text-sm font-mono text-emerald-400 mt-1 block px-2 py-1 bg-emerald-400/10 rounded-md shadow-inner border border-emerald-400/20">
+                    {algorithm.signature}
+                  </code>
+                </div>
+                
+                {showSolutionToggle && (
+                  <button
+                    onClick={() => setShowSolution(!showSolution)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded shadow transition-all duration-200 text-sm font-medium focus:outline-none ${
+                      showSolution 
+                        ? 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/50' 
+                        : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'
+                    }`}
+                  >
+                    <i className={`fas ${showSolution ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                    {showSolution ? 'Nascondi Soluzione' : 'Mostra Soluzione'}
+                  </button>
+                )}
+              </div>
+
+              <div className="flex-1 relative bg-[#1e1e1e] p-4 font-mono text-sm">
+                {showSolution ? (
+                   <pre className="h-full w-full bg-transparent text-[#d4d4d4] leading-relaxed outline-none overflow-auto whitespace-pre-wrap m-0">
+                     <code>{algorithm.solution}</code>
+                   </pre>
+                ) : (
+                  <textarea
+                    className="h-full w-full bg-transparent text-[#d4d4d4] font-mono text-sm leading-relaxed outline-none resize-none"
+                    value={userCode}
+                    onChange={(e) => onChange(e.target.value)}
+                    readOnly={readOnly}
+                    spellCheck={false}
+                    placeholder={`// Implementa ${algorithm.name} qui...\n`}
+                  />
+                )}
+                
+                {showSolution && (
+                  <div className="absolute bottom-6 right-6 bg-amber-900/90 text-amber-300 px-4 py-2 rounded-full text-xs font-bold border border-amber-700/50 uppercase tracking-wider pointer-events-none shadow-lg backdrop-blur-sm flex items-center gap-2">
+                    <i className="fas fa-check-circle"></i> Soluzione Ufficiale
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        };
+
+        function App() {
+          const [appMode, setAppMode] = useState('practice'); // 'practice', 'quiz-setup', 'quiz-active', 'quiz-summary'
+          
+          const [userCodes, setUserCodes] = useState({});
+          const [selectedAlgo, setSelectedAlgo] = useState(algorithmsData[0]);
+
+          const [quizQuestions, setQuizQuestions] = useState([]);
+          const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
+          const [timeElapsed, setTimeElapsed] = useState(0);
+          const timerRef = useRef(null);
+
+          // Caricamento Dati al mount
+          useEffect(() => {
+            try {
+              const saved = localStorage.getItem('algoUserCodes');
+              if (saved) setUserCodes(JSON.parse(saved));
+            } catch(e) {
+              console.warn("LocalStorage non disponibile");
+            }
+          }, []);
+
+          // Salvataggio automatico del codice
+          const handleCodeChange = (algoId, value) => {
+            const newCodes = { ...userCodes, [algoId]: value };
+            setUserCodes(newCodes);
+            try {
+              localStorage.setItem('algoUserCodes', JSON.stringify(newCodes));
+            } catch(e) {}
+          };
+
+          const startQuiz = (numQuestions) => {
+            const shuffled = [...algorithmsData].sort(() => 0.5 - Math.random());
+            setQuizQuestions(shuffled.slice(0, numQuestions));
+            setCurrentQuizIndex(0);
+            setTimeElapsed(0);
+            setAppMode('quiz-active');
+            
+            if (timerRef.current) clearInterval(timerRef.current);
+            timerRef.current = setInterval(() => {
+              setTimeElapsed(prev => prev + 1);
+            }, 1000);
+          };
+
+          const endQuiz = () => {
+            if (timerRef.current) clearInterval(timerRef.current);
+            setAppMode('quiz-summary');
+          };
+
+          const formatTime = (seconds) => {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+          };
+
+          const renderPracticeMode = () => (
+            <div className="flex h-full gap-6">
+              <div className="w-80 bg-slate-900 rounded-lg border border-slate-800 flex flex-col overflow-hidden shadow-lg shrink-0">
+                <div className="p-4 bg-slate-900 border-b border-slate-800 shadow-sm z-10 flex items-center justify-between">
+                  <div>
+                      <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wider">Libreria Algoritmi</h2>
+                      <p className="text-xs text-slate-500 mt-1">{algorithmsData.length} funzioni</p>
+                  </div>
+                  <i className="fas fa-layer-group text-slate-600 text-xl"></i>
+                </div>
+                <div className="flex-1 overflow-y-auto p-2">
+                  {algorithmsData.map(algo => {
+                    const isSelected = selectedAlgo?.id === algo.id;
+                    const hasCode = userCodes[algo.id] && userCodes[algo.id].trim().length > 0;
+                    return (
+                      <button
+                        key={algo.id}
+                        onClick={() => setSelectedAlgo(algo)}
+                        className={`w-full text-left px-4 py-3 mb-1 rounded-md text-sm transition-all duration-200 truncate flex items-center justify-between group outline-none ${
+                          isSelected 
+                            ? 'bg-indigo-600 text-white font-medium shadow-md' 
+                            : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                        }`}
+                      >
+                        <span className="truncate">{algo.name}</span>
+                        {hasCode && !isSelected && <div className="w-2 h-2 rounded-full bg-emerald-500 opacity-50 group-hover:opacity-100 transition-opacity" title="Codice salvato"></div>}
+                        {hasCode && isSelected && <div className="w-2 h-2 rounded-full bg-white shadow-sm" title="Codice salvato"></div>}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+              
+              <CodeWorkspace 
+                algorithm={selectedAlgo} 
+                userCode={userCodes[selectedAlgo?.id] || `// Implementa ${selectedAlgo?.name} qui...\n\n`} 
+                onChange={(val) => handleCodeChange(selectedAlgo.id, val)}
+              />
+            </div>
+          );
+
+          const renderQuizSetup = () => (
+            <div className="flex-1 flex items-center justify-center">
+              <div className="bg-slate-900 p-8 rounded-xl border border-slate-800 shadow-2xl max-w-md w-full">
+                <div className="text-center mb-8">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-900/50 text-indigo-400 mb-4 border border-indigo-500/30">
+                    <i className="fas fa-stopwatch text-3xl"></i>
+                  </div>
+                  <h2 className="text-2xl font-bold text-white">Configura il tuo Test</h2>
+                  <p className="text-slate-400 mt-2 text-sm">Scegli quanti algoritmi casuali vuoi affrontare. Il timer partirà subito dopo l'avvio.</p>
+                </div>
+                
+                <form onSubmit={(e) => {
+                  e.preventDefault();
+                  const n = parseInt(e.target.elements.num.value);
+                  if (n > 0 && n <= algorithmsData.length) startQuiz(n);
+                }}>
+                  <div className="mb-6">
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Numero di Algoritmi (Max {algorithmsData.length})</label>
+                    <input 
+                      type="number" 
+                      name="num" 
+                      min="1" 
+                      max={algorithmsData.length} 
+                      defaultValue="5"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 transition-all font-medium text-lg" 
+                    />
+                  </div>
+                  <button type="submit" className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg transition-colors shadow-lg shadow-indigo-900/20 outline-none">
+                    <i className="fas fa-play"></i> Inizia Test
+                  </button>
+                </form>
+              </div>
+            </div>
+          );
+
+          const renderQuizActive = () => {
+            const currentAlgo = quizQuestions[currentQuizIndex];
+            
+            return (
+              <div className="flex flex-col h-full gap-4">
+                <div className="bg-slate-900 rounded-lg p-4 border border-slate-800 flex items-center justify-between shadow-md">
+                  <div className="flex items-center gap-4">
+                    <div className="bg-indigo-900/50 text-indigo-300 px-4 py-1.5 rounded-full text-sm font-bold border border-indigo-700/50 shadow-inner">
+                      Domanda {currentQuizIndex + 1} di {quizQuestions.length}
+                    </div>
+                  </div>
+                  
+                  <div className="text-xl font-mono font-bold text-emerald-400 bg-slate-950 px-5 py-2 rounded-lg border border-slate-800 shadow-inner tracking-widest flex items-center gap-2">
+                    <i className="fas fa-clock text-slate-500 text-sm"></i> {formatTime(timeElapsed)}
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <button 
+                      onClick={() => setCurrentQuizIndex(prev => Math.max(0, prev - 1))}
+                      disabled={currentQuizIndex === 0}
+                      className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 disabled:opacity-30 disabled:hover:bg-slate-800 text-white rounded-md text-sm transition-colors font-medium border border-slate-700 outline-none"
+                    >
+                      <i className="fas fa-chevron-left"></i> Prec
+                    </button>
+                    <button 
+                      onClick={() => setCurrentQuizIndex(prev => Math.min(quizQuestions.length - 1, prev + 1))}
+                      disabled={currentQuizIndex === quizQuestions.length - 1}
+                      className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 disabled:opacity-30 disabled:hover:bg-slate-800 text-white rounded-md text-sm transition-colors font-medium border border-slate-700 outline-none"
+                    >
+                      Succ <i className="fas fa-chevron-right"></i>
+                    </button>
+                    <div className="w-px h-8 bg-slate-700 mx-2"></div>
+                    <button 
+                      onClick={endQuiz}
+                      className="flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-md text-sm transition-colors font-bold shadow-md shadow-rose-900/20 outline-none"
+                    >
+                      <i className="fas fa-stop-circle"></i> Termina Test
+                    </button>
+                  </div>
+                </div>
+
+                <CodeWorkspace 
+                  algorithm={currentAlgo} 
+                  userCode={userCodes[currentAlgo?.id] || `// Domanda ${currentQuizIndex + 1}: ${currentAlgo?.name}\n\n`} 
+                  onChange={(val) => handleCodeChange(currentAlgo.id, val)}
+                  showSolutionToggle={false} 
+                />
+              </div>
+            );
+          };
+
+          const renderQuizSummary = () => (
+            <div className="flex h-full gap-6">
+              <div className="w-80 shrink-0 flex flex-col gap-4">
+                <div className="bg-slate-900 p-6 rounded-lg border border-slate-800 text-center shadow-lg relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-indigo-500"></div>
+                  <h2 className="text-lg font-bold text-slate-300 mb-2">Test Terminato!</h2>
+                  <div className="text-4xl font-mono font-bold text-emerald-400 mb-6 drop-shadow-md">
+                    {formatTime(timeElapsed)}
+                  </div>
+                  <button 
+                    onClick={() => { setAppMode('practice'); setSelectedAlgo(algorithmsData[0]); }}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-md font-bold transition-colors border border-slate-700 shadow-sm outline-none"
+                  >
+                    <i className="fas fa-rotate-left"></i> Torna alla Practice
+                  </button>
+                </div>
+
+                <div className="flex-1 bg-slate-900 rounded-lg border border-slate-800 flex flex-col overflow-hidden shadow-lg">
+                  <div className="p-4 bg-slate-900 border-b border-slate-800 shadow-sm z-10">
+                    <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wider">Riepilogo Domande</h2>
+                    <p className="text-xs text-slate-500 mt-1">Clicca per revisionare e confrontare le soluzioni</p>
+                  </div>
+                  <div className="flex-1 overflow-y-auto p-2">
+                    {quizQuestions.map((algo, idx) => {
+                      const isSelected = (selectedAlgo?.id || quizQuestions[0]?.id) === algo.id;
+                      return (
+                        <button
+                          key={algo.id}
+                          onClick={() => setSelectedAlgo(algo)}
+                          className={`w-full text-left px-4 py-3 mb-1 rounded-md text-sm transition-all duration-200 truncate flex items-center gap-3 outline-none ${
+                            isSelected 
+                              ? 'bg-slate-700 text-white font-medium border border-slate-600 shadow-inner' 
+                              : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
+                          }`}
+                        >
+                          <span className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${isSelected ? 'bg-indigo-500 text-white' : 'bg-slate-800 text-slate-400 border border-slate-700'}`}>
+                            {idx + 1}
+                          </span>
+                          <span className="truncate">{algo.name}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              <CodeWorkspace 
+                algorithm={selectedAlgo || quizQuestions[0]} 
+                userCode={userCodes[selectedAlgo?.id || quizQuestions[0]?.id] || '// Nessun codice inserito'} 
+                readOnly={true}
+                showSolutionToggle={true} 
+              />
+            </div>
+          );
+
+          return (
+            <div className="h-full bg-slate-950 flex flex-col p-4">
+              <header className="flex items-center justify-between bg-slate-900 px-6 py-4 rounded-lg border border-slate-800 mb-4 shadow-sm shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-emerald-500 rounded-lg flex items-center justify-center shadow-lg text-white font-bold text-xl">
+                    <i className="fas fa-code"></i>
+                  </div>
+                  <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-emerald-400 tracking-tight">
+                    AlgoTrainer
+                  </h1>
+                </div>
+                
+                {appMode !== 'quiz-active' && (
+                  <nav className="flex items-center gap-2 bg-slate-950 p-1.5 rounded-lg border border-slate-800">
+                    <button 
+                      onClick={() => { setAppMode('practice'); if(!selectedAlgo) setSelectedAlgo(algorithmsData[0]); }}
+                      className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-bold transition-all duration-200 outline-none ${
+                        appMode === 'practice' 
+                          ? 'bg-slate-800 text-indigo-400 shadow-md border border-slate-700/50' 
+                          : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                      }`}
+                    >
+                      <i className="fas fa-book-open"></i> Practice Mode
+                    </button>
+                    <button 
+                      onClick={() => setAppMode('quiz-setup')}
+                      className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-bold transition-all duration-200 outline-none ${
+                        appMode.startsWith('quiz') 
+                          ? 'bg-slate-800 text-emerald-400 shadow-md border border-slate-700/50' 
+                          : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                      }`}
+                    >
+                      <i className="fas fa-stopwatch"></i> Test Mode
+                    </button>
+                  </nav>
+                )}
+              </header>
+
+              <main className="flex-1 overflow-hidden">
+                {appMode === 'practice' && renderPracticeMode()}
+                {appMode === 'quiz-setup' && renderQuizSetup()}
+                {appMode === 'quiz-active' && renderQuizActive()}
+                {appMode === 'quiz-summary' && renderQuizSummary()}
+              </main>
+            </div>
+          );
+        }
+
+        // Avvio di React nel browser
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
