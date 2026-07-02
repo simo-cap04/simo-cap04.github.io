@@ -15,7 +15,7 @@
     <!-- Babel (Compilatore per far capire a Chrome il codice React) -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
-    <!-- FontAwesome per le icone (sostituisce Lucide in questa versione HTML) -->
+    <!-- FontAwesome per le icone -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -33,40 +33,96 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        // Estraiamo gli hook da React Globale
         const { useState, useEffect, useRef } = React;
 
-        // Inserimento diretto di tutti gli algoritmi forniti
         const algorithmsData = [
-          { id: "Bandiera", name: "Bandiera", signature: "void Bandiera(Color B[], int n)", solution: `void Bandiera(Color B[], int n) {\n    int i = 0;\n    int k = n - 1;\n\n    for (int j = 0; j <= k; j++) {\n        if (B[j] == verde) {\n            swap(B, j, i);\n            i++;\n        } else if (B[j] == rosso) {\n            swap(B, j, k);\n            k--;\n            j--;\n        }\n    }\n}` },
-          { id: "countBubbleSort", name: "countBubbleSort", signature: "int countBubbleSort(int A[], int n)", solution: `int countBubbleSort(int A[], int n) {\n    int flag;\n    int confronti = 0;\n\n    for (int i = 0; i < n - 1; i++) {\n        flag = 0;\n        for (int j = 0; j < n - i - 1; j++) {\n            confronti++;\n            if (A[j] > A[j + 1]) {\n                swap(A, j, j + 1);\n                flag = 1;\n            }\n        }\n        if (flag == 0)\n            break;\n    }\n    return confronti;\n}` },
-          { id: "find", name: "QuickSelect (find)", signature: "int find(int A[], int N, int f)", solution: `int find(int A[], int N, int f) {\n    int LEFT = 0;\n    int RIGHT = N - 1;\n    while (LEFT < RIGHT) {\n        int left = LEFT;\n        int right = RIGHT;\n        int r = A[f];\n        while (left <= right) {\n            while (A[left] < r) left++;\n            while (r < A[right]) right--;\n            if (left <= right) {\n                swap(A, left, right);\n                left++;\n                right--;\n            }\n        }\n        if (f <= right)\n            RIGHT = right;\n        else if (f >= left)\n            LEFT = left;\n        else\n            break;\n    }\n    return A[f];\n}` },
-          { id: "mergeList", name: "mergeList", signature: "list mergeList(list l, list m)", solution: `list mergeList(list l, list m) {\n    if (l == NULL) {\n        return m;\n    } else if (m == NULL) {\n        return l;\n    } else {\n        if (l->info <= m->info) {\n            l->next = mergeList(l->next, m);\n            return l;\n        } else {\n            m->next = mergeList(m->next, l);\n            return m;\n        }\n    }\n}` },
-          { id: "mergeListNonDistruttiva", name: "mergeListNonDistruttiva", signature: "list mergeListNonDistruttiva(list l, list m)", solution: `list mergeListNonDistruttiva(list l, list m) {\n    if (l == NULL) {\n        return m;\n    } else if (m == NULL) {\n        return l;\n    } else if (l->info <= m->info) {\n        return Cons(l->info, mergeListNonDistruttiva(l->next, m));\n    } else {\n        return Cons(m->info, mergeListNonDistruttiva(l, m->next));\n    }\n}` },
-          { id: "merge", name: "merge (Array)", signature: "void merge(int A[], int a, int p, int b)", solution: `void merge(int A[], int a, int p, int b) {\n    int n1 = p - a + 1;\n    int n2 = b - p;\n    int* L = (int*)malloc(n1 * sizeof(int));\n    int* R = (int*)malloc(n2 * sizeof(int));\n    arraycpy(A, a, p, L, 0);\n    arraycpy(A, p + 1, b, R, 0);\n    int i = 0, j = 0, k = a;\n    while (i < n1 && j < n2) {\n        if (L[i] <= R[j]) { A[k] = L[i]; i++; }\n        else { A[k] = R[j]; j++; }\n        k++;\n    }\n    while (i < n1) { A[k] = L[i]; k++; i++; }\n    while (j < n2) { A[k] = R[j]; k++; j++; }\n    free(L);\n    free(R);\n}` },
-          { id: "mergeSort", name: "mergeSort (List)", signature: "list mergeSort(list l)", solution: `list mergeSort(list l) {\n    if (l == NULL) return l;\n    else if (l->next == NULL) return l;\n    else {\n        list m = split(l);\n        l = mergeSort(l);\n        m = mergeSort(m);\n        return mergeList(l, m);\n    }\n}` },
-          { id: "Partition", name: "Partition", signature: "int Partition(int A[], int p, int r)", solution: `int Partition(int A[], int p, int r) {\n    int x = A[p];\n    int i = p + 1;\n    int j = r;\n    while (i <= j) {\n        if (A[i] <= x) i = i + 1;\n        else if (A[j] > x) j = j - 1;\n        else {\n            swap(A, i, j);\n            i = i + 1;\n            j = j - 1;\n        }\n    }\n    swap(A, p, i - 1);\n    return i - 1;\n}` },
-          { id: "dicotomicSearchRec", name: "dicotomicSearchRec", signature: "int dicotomicSearchRec(int A[], int i, int j, int target)", solution: `int dicotomicSearchRec(int A[], int i, int j, int target) {\n    int m = (i + j) / 2;\n    if (i > j) return -1;\n    else if (A[m] == target) return m;\n    else if (target > A[m]) return dicotomicSearchRec(A, m + 1, j, target);\n    else return dicotomicSearchRec(A, i, m - 1, target);\n}` },
-          { id: "binomialRec", name: "binomialRec", signature: "int binomialRec(int n, int k)", solution: `int binomialRec(int n, int k) {\n    if (k == 0 || n == k) return 1;\n    else return binomialRec(n - 1, k - 1) + binomialRec(n - 1, k);\n}` },
-          { id: "binomialBottUp", name: "binomialBottUp", signature: "int binomialBottUp(int n, int k)", solution: `int binomialBottUp(int n, int k) {\n    int mat[n + 1][k + 1];\n    for (int i = 0; i < n + 1; i++) {\n        for (int j = 0; j < k + 1; j++) {\n            if (j == 0 || j == i) mat[i][j] = 1;\n            else mat[i][j] = -1;\n        }\n    }\n    for (int i = 0; i < n + 1; i++) {\n        for (int j = 0; j < k + 1; j++) {\n            if (j != 0 && j != i)\n                mat[i][j] = mat[i - 1][j - 1] + mat[i - 1][j];\n        }\n    }\n    return mat[n][k];\n}` },
-          { id: "binomialNoMem", name: "binomialNoMem", signature: "int binomialNoMem(int n, int k)", solution: `int binomialNoMem(int n, int k) {\n    int res = 0;\n    for (int i = 0; i < k + 1; i++) {\n        if (i == 0 || n == i) res += 1;\n        else res = (res * (n - i + 1)) / i;\n    }\n    return res;\n}` },
-          { id: "distance", name: "Edit Distance", signature: "Matrix distance(char* X, char* Y)", solution: `Matrix distance(char* X, char* Y) {\n    int m = strlen(X);\n    int n = strlen(Y);\n    Matrix D = newMatrix(m + 1, n + 1);\n    for (int i = 0; i <= m; i++) D->array[i][0] = i;\n    for (int j = 0; j <= n; j++) D->array[0][j] = j;\n    for (int i = 1; i <= m; i++)\n        for (int j = 1; j <= n; j++)\n            if (X[i - 1] == Y[j - 1])\n                D->array[i][j] = D->array[i - 1][j - 1];\n            else\n                D->array[i][j] = 1 + min(D->array[i][j - 1], min(D->array[i - 1][j], D->array[i - 1][j - 1]));\n    return D;\n}` },
-          { id: "deleteAll", name: "deleteAll", signature: "list deleteAll(int n, list as)", solution: `list deleteAll(int n, list as) {\n    if (as == NULL) return as;\n    else {\n        if (as->info == n) return deleteAll(n, as->next);\n        else {\n            as->next = deleteAll(n, as->next);\n            return as;\n        }\n    }\n}` },
-          { id: "symmDiff", name: "symmDiff", signature: "list symmDiff(list xs, list ys)", solution: `list symmDiff(list xs, list ys) {\n    if (xs == NULL) return copyList(ys);\n    else if (ys == NULL) return copyList(xs);\n    else if (xs->info == ys->info) return symmDiff(xs->next, ys->next);\n    else if (xs->info < ys->info) return Cons(xs->info, symmDiff(xs->next, ys));\n    else return Cons(ys->info, symmDiff(xs, ys->next));\n}` },
-          { id: "insertList", name: "insertList", signature: "list insertList(list as, list bs, int n)", solution: `list insertList(list as, list bs, int n) {\n    if (n == 0) return concat(as, bs);\n    else {\n        bs->next = insertList(as, bs->next, n - 1);\n        return bs;\n    }\n}` },
-          { id: "insertHeapMin", name: "insertHeapMin", signature: "bool insertHeapMin(Heap H, int k)", solution: `bool insertHeapMin(Heap H, int k) {\n    if (H->hd == H->dim) return false;\n    else {\n        H->keys[H->hd] = k;\n        H->hd++;\n        int i = H->hd - 1;\n        while (i > 0 && H->keys[i] < H->keys[parent(H, i)]) {\n            swap(H->keys, i, parent(H, i));\n            i = parent(H, i);\n        }\n        return true;\n    }\n}` },
-          { id: "corank", name: "corank", signature: "int corank(list l)", solution: `int corankAux(list l, int tot) {\n    if (l == NULL) return tot;\n    else {\n        tot = tot + l->info;\n        l->info = tot;\n        return corankAux(l->next, tot);\n    }\n}\nint corank(list l) { return corankAux(l, 0); }` },
-          { id: "rank", name: "rank", signature: "int rank(list l)", solution: `int rank(list l) {\n    if (l == NULL) return 0;\n    else {\n        l->info = l->info + rank(l->next);\n        return l->info;\n    }\n}` },
-          { id: "fast_reverse", name: "fast_reverse", signature: "list fast_reverse(list l)", solution: `list fast_reverseAux(list l, list appoggio) {\n    if (l == NULL) return appoggio;\n    else return fast_reverseAux(l->next, Cons(l->info, appoggio));\n}\nlist fast_reverse(list l) { return fast_reverseAux(l, NULL); }` },
-          { id: "height", name: "height (kTree)", signature: "int height(kTree t)", solution: `int height(kTree t) {\n    if (t->child == NULL) return 0;\n    else {\n        int tot = 0;\n        kTree v = t->child;\n        while (v != NULL) {\n            tot = max(tot, height(v));\n            v = v->sibling;\n        }\n        return tot + 1;\n    }\n}` },
-          { id: "sumLeaf", name: "sumLeaf", signature: "int sumLeaf(kTree t)", solution: `int sumLeaf(kTree t) {\n    if (t == NULL) return 0;\n    else if (t->child == NULL) return t->key;\n    else {\n        kTree v = t->child;\n        int sum = 0;\n        while (v) {\n            sum += sumLeaf(v);\n            v = v->sibling;\n        }\n        return sum;\n    }\n}` },
-          { id: "kTreeBFS", name: "kTreeBFS", signature: "list kTreeBFS(kTree t)", solution: `list kTreeBFS(kTree t) {\n    if (t == NULL) return NULL;\n    queue q = NewQueue();\n    EnQueue(t, q);\n    list l = NULL;\n    while (!isEmptyQueue(q)) {\n        kTree node = DeQueue(q);\n        l = Cons(node->key, l);\n        node = node->child;\n        while (node) {\n            EnQueue(node, q);\n            node = node->sibling;\n        }\n    }\n    return reverse(l);\n}` },
-          { id: "isOrdered", name: "isOrdered (BTree)", signature: "bool isOrdered(btree bt)", solution: `Triple isOrderedBTreeAux(btree bt) {\n    Triple t;\n    t.isOrdered = true;\n    t.min = bt->key;\n    t.max = bt->key;\n\n    if (bt->right) {\n        Triple check_right = isOrderedBTreeAux(bt->right);\n        if (check_right.isOrdered && bt->key <= check_right.min) t.max = check_right.max;\n        else t.isOrdered = false;\n    }\n    if (bt->left) {\n        Triple check_left = isOrderedBTreeAux(bt->left);\n        if (check_left.isOrdered && bt->key >= check_left.max) t.min = check_left.min;\n        else t.isOrdered = false;\n    }\n    return t;\n}\nbool isOrdered(btree bt) {\n    if (!bt) return true;\n    Triple ret = isOrderedBTreeAux(bt);\n    return ret.isOrdered;\n}` },
-          { id: "heapSort", name: "heapSort", signature: "void heapSort(int A[], int dim)", solution: `void maxHeapify(int H[], int i, int hd) {\n    int leftindex = left(i, hd);\n    int rightindex = right(i, hd);\n    int max = i;\n    if (leftindex != i && H[leftindex] > H[max]) max = leftindex;\n    if (rightindex != i && H[rightindex] > H[max]) max = rightindex;\n    if (max != i) {\n        swap(H, i, max);\n        maxHeapify(H, max, hd);\n    }\n}\nvoid buildMaxHeap(int A[], int dim) {\n    int m = dim / 2 + 1;\n    for (int i = m; i >= 0; i--) maxHeapify(A, i, dim);\n}\nvoid heapSort(int A[], int dim) {\n    buildMaxHeap(A, dim - 1);\n    for (int i = dim - 1; i > 0; i--) {\n        swap(A, 0, i);\n        maxHeapify(A, 0, i - 1);\n    }\n}` },
-          { id: "hashSearch", name: "hashSearch", signature: "int hashSearch(HashTable T, int k)", solution: `int hashSearch(HashTable T, int k) {\n    for (int i = 0; i < T->dim; i++) {\n        int pos = linearProbing(k, i, T->dim);\n        if (T->array[pos] == k) return k;\n        else if (T->array[pos] == -1) return -1;\n    }\n    return -2;\n}` },
-          { id: "split", name: "split", signature: "list split(list l)", solution: `list split(list l) {\n    list slow = l;\n    list fast = l->next;\n    while (fast && fast->next) {\n        slow = slow->next;\n        fast = fast->next->next;\n    }\n    list ret = slow->next;\n    slow->next = NULL;\n    return ret;\n}` },
-          { id: "palindrome", name: "palindrome", signature: "bool palindrome(list l)", solution: `bool equal(list l, list r) {\n    if (l == NULL) return (r == NULL);\n    else if (r == NULL) return false;\n    else if (l->info == r->info) return true && equal(l->next, r->next);\n    else return false;\n}\nbool palindrome(list l) {\n    if (l == NULL) return true;\n    else {\n        list reversed = fast_reverse(l);\n        return equal(l, reversed);\n    }\n}` },
-          { id: "expIter", name: "expIter", signature: "int expIter(int x, int n)", solution: `int expIter(int x, int n) {\n    int z = 1;\n    while (n > 0) {\n        if (n % 2 == 1) z = z * x;\n        x = x * x;\n        n = n / 2;\n    }\n    return z;\n}` }
+          // ==============================
+          // ARRAY & ORDINAMENTO
+          // ==============================
+          { id: "Bandiera", category: "Array & Ordinamento", name: "Bandiera", signature: "void Bandiera(Color B[], int n)", solution: `void Bandiera(Color B[], int n) {\n    int i = 0;\n    int k = n - 1;\n    for (int j = 0; j <= k; j++) {\n        if (B[j] == verde) {\n            swap(B, j, i);\n            i++;\n        } else if (B[j] == rosso) {\n            swap(B, j, k);\n            k--;\n            j--;\n        }\n    }\n}` },
+          { id: "countBubbleSort", category: "Array & Ordinamento", name: "countBubbleSort", signature: "int countBubbleSort(int A[], int n)", solution: `int countBubbleSort(int A[], int n) {\n    int flag;\n    int confronti = 0;\n    for (int i = 0; i < n - 1; i++) {\n        flag = 0;\n        for (int j = 0; j < n - i - 1; j++) {\n            confronti++;\n            if (A[j] > A[j + 1]) {\n                swap(A, j, j + 1);\n                flag = 1;\n            }\n        }\n        if (flag == 0) break;\n    }\n    return confronti;\n}` },
+          { id: "find", category: "Array & Ordinamento", name: "find (Quickselect)", signature: "int find(int A[], int N, int f)", solution: `int find(int A[], int N, int f) {\n    int LEFT = 0;\n    int RIGHT = N - 1;\n    while (LEFT < RIGHT) {\n        int left = LEFT;\n        int right = RIGHT;\n        int r = A[f];\n        while (left <= right) {\n            while (A[left] < r) left++;\n            while (r < A[right]) right--;\n            if (left <= right) {\n                swap(A, left, right);\n                left++;\n                right--;\n            }\n        }\n        if (f <= right) RIGHT = right;\n        else if (f >= left) LEFT = left;\n        else break;\n    }\n    return A[f];\n}` },
+          { id: "merge", category: "Array & Ordinamento", name: "merge", signature: "void merge(int A[], int a, int p, int b)", solution: `void merge(int A[], int a, int p, int b) {\n    int n1 = p - a + 1;\n    int n2 = b - p;\n    int* L = (int*)malloc(n1 * sizeof(int));\n    int* R = (int*)malloc(n2 * sizeof(int));\n    arraycpy(A, a, p, L, 0);\n    arraycpy(A, p + 1, b, R, 0);\n    int i = 0, j = 0, k = a;\n    while (i < n1 && j < n2) {\n        if (L[i] <= R[j]) { A[k] = L[i]; i++; }\n        else { A[k] = R[j]; j++; }\n        k++;\n    }\n    while (i < n1) { A[k] = L[i]; k++; i++; }\n    while (j < n2) { A[k] = R[j]; k++; j++; }\n    free(L);\n    free(R);\n}` },
+          { id: "Partition", category: "Array & Ordinamento", name: "Partition", signature: "int Partition(int A[], int p, int r)", solution: `int Partition(int A[], int p, int r) {\n    int x = A[p];\n    int i = p + 1;\n    int j = r;\n    while (i <= j) {\n        if (A[i] <= x) i = i + 1;\n        else if (A[j] > x) j = j - 1;\n        else {\n            swap(A, i, j);\n            i = i + 1;\n            j = j - 1;\n        }\n    }\n    swap(A, p, i - 1);\n    return i - 1;\n}` },
+          { id: "dicotomicSearchRec", category: "Array & Ordinamento", name: "dicotomicSearchRec", signature: "int dicotomicSearchRec(int A[], int i, int j, int target)", solution: `int dicotomicSearchRec(int A[], int i, int j, int target) {\n    int m = (i + j) / 2;\n    if (i > j) return -1;\n    else if (A[m] == target) return m;\n    else if (target > A[m]) return dicotomicSearchRec(A, m + 1, j, target);\n    else return dicotomicSearchRec(A, i, m - 1, target);\n}` },
+          { id: "maxDecSeq", category: "Array & Ordinamento", name: "maxDecSeq", signature: "int maxDecSeq(int A[], int n)", solution: `int maxDecSeq(int A[], int n) {\n    if (n == 0) return 0;\n    int max = 1;\n    int current = 1;\n    for (int i = 1; i < n; i++) {\n        if (A[i] < A[i - 1]) {\n            current++;\n        } else {\n            if (current > max) {\n                max = current;\n                current = 1;\n            }\n        }\n    }\n    if (current > max) max = current;\n    return max;\n}` },
+          { id: "searchRec", category: "Array & Ordinamento", name: "searchRec", signature: "int searchRec(int a[], int i, int target)", solution: `int searchRec(int a[], int i, int target) {\n    int j = dim(a);\n    if (i > j) return -1;\n    else if (a[i] == target) return i;\n    else return searchRec(a, i + 1, target);\n}` },
+          { id: "searchIter", category: "Array & Ordinamento", name: "searchIter", signature: "int searchIter(int a[], int i, int target)", solution: `int searchIter(int a[], int i, int target) {\n    int j = dim(a);\n    for (int k = 0; k < j; k++) {\n        if (a[k] == target) return k;\n    }\n    return -1;\n}` },
+
+          // ==============================
+          // LISTE CONCATENATE
+          // ==============================
+          { id: "mergeList", category: "Liste", name: "mergeList", signature: "list mergeList(list l, list m)", solution: `list mergeList(list l, list m) {\n    if (l == NULL) return m;\n    else if (m == NULL) return l;\n    else {\n        if (l->info <= m->info) {\n            l->next = mergeList(l->next, m);\n            return l;\n        } else {\n            m->next = mergeList(m->next, l);\n            return m;\n        }\n    }\n}` },
+          { id: "mergeListNonDistruttiva", category: "Liste", name: "mergeListNonDistruttiva", signature: "list mergeListNonDistruttiva(list l, list m)", solution: `list mergeListNonDistruttiva(list l, list m) {\n    if (l == NULL) return m;\n    else if (m == NULL) return l;\n    else if (l->info <= m->info) {\n        return Cons(l->info, mergeListNonDistruttiva(l->next, m));\n    } else {\n        return Cons(m->info, mergeListNonDistruttiva(l, m->next));\n    }\n}` },
+          { id: "mergeSort", category: "Liste", name: "mergeSort (List)", signature: "list mergeSort(list l)", solution: `list mergeSort(list l) {\n    if (l == NULL) return l;\n    else if (l->next == NULL) return l;\n    else {\n        list m = split(l);\n        l = mergeSort(l);\n        m = mergeSort(m);\n        return mergeList(l, m);\n    }\n}` },
+          { id: "split", category: "Liste", name: "split", signature: "list split(list l)", solution: `list split(list l) {\n    list slow = l;\n    list fast = l->next;\n    while (fast && fast->next) {\n        slow = slow->next;\n        fast = fast->next->next;\n    }\n    list ret = slow->next;\n    slow->next = NULL;\n    return ret;\n}` },
+          { id: "deleteAll", category: "Liste", name: "deleteAll", signature: "list deleteAll(int n, list as)", solution: `list deleteAll(int n, list as) {\n    if (as == NULL) return as;\n    else {\n        if (as->info == n) return deleteAll(n, as->next);\n        else {\n            as->next = deleteAll(n, as->next);\n            return as;\n        }\n    }\n}` },
+          { id: "symmDiff", category: "Liste", name: "symmDiff", signature: "list symmDiff(list xs, list ys)", solution: `list symmDiff(list xs, list ys) {\n    if (xs == NULL) return copyList(ys);\n    else if (ys == NULL) return copyList(xs);\n    else if (xs->info == ys->info) return symmDiff(xs->next, ys->next);\n    else if (xs->info < ys->info) return Cons(xs->info, symmDiff(xs->next, ys));\n    else return Cons(ys->info, symmDiff(xs, ys->next));\n}` },
+          { id: "insertList", category: "Liste", name: "insertList", signature: "list insertList(list as, list bs, int n)", solution: `list insertList(list as, list bs, int n) {\n    if (n == 0) return concat(as, bs);\n    else {\n        bs->next = insertList(as, bs->next, n - 1);\n        return bs;\n    }\n}` },
+          { id: "corank", category: "Liste", name: "corank", signature: "int corank(list l)", solution: `int corankAux(list l, int tot) {\n    if (l == NULL) return tot;\n    else {\n        tot = tot + l->info;\n        l->info = tot;\n        return corankAux(l->next, tot);\n    }\n}\nint corank(list l) { return corankAux(l, 0); }` },
+          { id: "rank", category: "Liste", name: "rank", signature: "int rank(list l)", solution: `int rank(list l) {\n    if (l == NULL) return 0;\n    else {\n        l->info = l->info + rank(l->next);\n        return l->info;\n    }\n}` },
+          { id: "fast_reverse", category: "Liste", name: "fast_reverse", signature: "list fast_reverse(list l)", solution: `list fast_reverseAux(list l, list appoggio) {\n    if (l == NULL) return appoggio;\n    else return fast_reverseAux(l->next, Cons(l->info, appoggio));\n}\nlist fast_reverse(list l) { return fast_reverseAux(l, NULL); }` },
+          { id: "oddEven", category: "Liste", name: "oddEven", signature: "list oddEven(list l)", solution: `list oddList(list l) {\n    if (l == NULL) return NULL;\n    else if (l->info % 2 == 0) return oddList(l->next);\n    else return Cons(l->info, oddList(l->next));\n}\nlist evenList(list l) {\n    if (l == NULL) return NULL;\n    else if (l->info % 2 == 0) return Cons(l->info, evenList(l->next));\n    else return evenList(l->next);\n}\nlist oddEven(list l) { return concat(oddList(l), evenList(l)); }` },
+          { id: "ordInsert", category: "Liste", name: "ordInsert", signature: "list ordInsert(int k, list p, list l)", solution: `list ordInsert(int k, list p, list l) {\n    if (l == NULL) return Cons(k, p, l);\n    else if (k == l->info) return l;\n    else if (k < l->info) return Cons(k, p, l);\n    else {\n        l->next = ordInsert(k, l, l->next);\n        return l;\n    }\n}` },
+          { id: "differenza", category: "Liste", name: "differenza", signature: "list differenza(list l, list m)", solution: `list differenza(list l, list m) {\n    if (l == NULL) return NULL;\n    else if (m == NULL) return l;\n    else if (l->info == m->info) return differenza(l->next, m->next);\n    else if (l->info < m->info) return Cons(l->info, differenza(l->next, m));\n    else return differenza(l, m->next);\n}` },
+          { id: "unione", category: "Liste", name: "unione", signature: "list unione(list l, list m)", solution: `list unione(list l, list m) {\n    if (l == NULL) return m;\n    else if (m == NULL) return l;\n    else if (m->info == l->info) return Conc(m->info, unione(l->next, m->next));\n    else if (m->info < l->info) return Conc(m->info, unione(l, m->next));\n    else return Conc(l->info, unione(l->next, m));\n}` },
+          { id: "intersect", category: "Liste", name: "intersect", signature: "list intersect(list l, list m)", solution: `list intersect(list l, list m) {\n    if (l == NULL) return NULL;\n    else if (m == NULL) return NULL;\n    else if (l->info == m->info) return Cons(l->info, intersect(l->next, m->next));\n    else if (l->info < m->info) return intersect(l->next, m);\n    else return intersect(l, m->next);\n}` },
+          { id: "subset", category: "Liste", name: "subset", signature: "bool subset(list l, list m)", solution: `bool subset(list l, list m) {\n    if (l == NULL) return true;\n    if (m == NULL) return false;\n    if (l->info == m->info) return subset(l->next, m->next);\n    if (l->info > m->info) return subset(l, m->next);\n    return false;\n}` },
+          { id: "equal", category: "Liste", name: "equal", signature: "bool equal(list l, list r)", solution: `bool equal(list l, list r) {\n    if (l == NULL) {\n        if (r == NULL) return true;\n        else return false;\n    } else if (r == NULL) {\n        if (l == NULL) return true;\n        else return false;\n    } else if (l->info == r->info) {\n        return true && equal(l->next, r->next);\n    } else return false;\n}` },
+          { id: "palindrome", category: "Liste", name: "palindrome", signature: "bool palindrome(list l)", solution: `bool palindrome(list l) {\n    if (l == NULL) return true;\n    else {\n        list reversed = fast_reverse(l);\n        return equal(l, reversed);\n    }\n}` },
+
+          // ==============================
+          // ALBERI K-ARI
+          // ==============================
+          { id: "height", category: "Alberi K-ari (kTree)", name: "height", signature: "int height(kTree t)", solution: `int height(kTree t) {\n    if (t->child == NULL) return 0;\n    else {\n        int tot = 0;\n        kTree v = t->child;\n        while (v != NULL) {\n            tot = max(tot, height(v));\n            v = v->sibling;\n        }\n        return tot + 1;\n    }\n}` },
+          { id: "sumLeaf", category: "Alberi K-ari (kTree)", name: "sumLeaf", signature: "int sumLeaf(kTree t)", solution: `int sumLeaf(kTree t) {\n    if (t == NULL) return 0;\n    else if (t->child == NULL) return t->key;\n    else {\n        kTree v = t->child;\n        int sum = 0;\n        while (v) {\n            sum += sumLeaf(v);\n            v = v->sibling;\n        }\n        return sum;\n    }\n}` },
+          { id: "kTreeBFS", category: "Alberi K-ari (kTree)", name: "kTreeBFS", signature: "list kTreeBFS(kTree t)", solution: `list kTreeBFS(kTree t) {\n    if (t == NULL) return NULL;\n    queue q = NewQueue();\n    EnQueue(t, q);\n    list l = NULL;\n    while (!isEmptyQueue(q)) {\n        kTree node = DeQueue(q);\n        l = Cons(node->key, l);\n        node = node->child;\n        while (node) {\n            EnQueue(node, q);\n            node = node->sibling;\n        }\n    }\n    return reverse(l);\n}` },
+          { id: "complete", category: "Alberi K-ari (kTree)", name: "complete", signature: "kTree complete(int key, int dg, int ht)", solution: `kTree complete(int key, int dg, int ht) {\n    if (ht == 0) return consTree(key, NULL, NULL);\n    kTree child = complete(key, dg, ht - 1);\n    kTree temp = child;\n    for (int i = 0; i < dg - 1; i++) {\n        temp->sibling = complete(key, dg, ht - 1);\n        temp = temp->sibling;\n    }\n    return consTree(key, child, NULL);\n}` },
+          { id: "countInt", category: "Alberi K-ari (kTree)", name: "countInt", signature: "int countInt(kTree t)", solution: `int countInt(kTree t) {\n    if (t == NULL || t->child == NULL) return 0;\n    int tot = 1;\n    kTree temp = t->child;\n    while (temp) {\n        tot = tot + countInt(temp);\n        temp = temp->sibling;\n    }\n    return tot;\n}` },
+          { id: "fringe", category: "Alberi K-ari (kTree)", name: "fringe", signature: "list fringe(kTree t)", solution: `list fringe(kTree t) {\n    if (t->child == NULL) return Cons(t->key, NULL);\n    else {\n        list result = NULL;\n        kTree temp = t->child;\n        while (temp) {\n            result = concat(result, fringe(temp));\n            temp = temp->sibling;\n        }\n        return result;\n    }\n}` },
+          { id: "maxSumBranch", category: "Alberi K-ari (kTree)", name: "maxSumBranch", signature: "int maxSumBranch(kTree t)", solution: `int maxSumBranch(kTree t) {\n    if (t->child == NULL) return t->key;\n    else {\n        int massimo = INT_MIN;\n        kTree c = t->child;\n        while (c) {\n            massimo = max(massimo, maxSumBranch(c));\n            c = c->sibling;\n        }\n        return t->key + massimo;\n    }\n}` },
+          { id: "degree", category: "Alberi K-ari (kTree)", name: "degree", signature: "int degree(kTree t)", solution: `int degree(kTree t) {\n    if (t->child == NULL) return 0;\n    else {\n        kTree c = t->child;\n        int contaAttuale = 0;\n        int massimo = 0;\n        while (c) {\n            contaAttuale++;\n            massimo = max(massimo, degree(c));\n            c = c->sibling;\n        }\n        return max(contaAttuale, massimo);\n    }\n}` },
+
+          // ==============================
+          // ALBERI BINARI
+          // ==============================
+          { id: "isOrdered", category: "Alberi Binari (BTree)", name: "isOrdered", signature: "bool isOrdered(btree bt)", solution: `Triple isOrderedBTreeAux(btree bt) {\n    Triple t;\n    t.isOrdered = true;\n    t.min = bt->key;\n    t.max = bt->key;\n    if (bt->right) {\n        Triple check_right = isOrderedBTreeAux(bt->right);\n        if (check_right.isOrdered && bt->key <= check_right.min) t.max = check_right.max;\n        else t.isOrdered = false;\n    }\n    if (bt->left) {\n        Triple check_left = isOrderedBTreeAux(bt->left);\n        if (check_left.isOrdered && bt->key >= check_left.max) t.min = check_left.min;\n        else t.isOrdered = false;\n    }\n    return t;\n}\n\nbool isOrdered(btree bt) {\n    if (!bt) return true;\n    Triple ret = isOrderedBTreeAux(bt);\n    return ret.isOrdered;\n}` },
+          { id: "DescList", category: "Alberi Binari (BTree)", name: "DescList", signature: "list DescList(btree bt)", solution: `list DescList_aux(btree bt, list l) {\n    if (bt == NULL) return l;\n    else return DescList_aux(bt->right, Cons(bt->key, DescList_aux(bt->left, l)));\n}\nlist DescList(btree bt) { return DescList_aux(bt, NULL); }` },
+          { id: "CrescList", category: "Alberi Binari (BTree)", name: "CrescList_aux", signature: "list CrescList_aux(btree bt, list l)", solution: `list CrescList_aux(btree bt, list l) {\n    if (bt == NULL) return l;\n    else return CrescList_aux(bt->left, Cons(bt->key, CrescList_aux(bt->right, l)));\n}` },
+          { id: "minInBtree", category: "Alberi Binari (BTree)", name: "minInBtree", signature: "btree minInBtree(btree bt)", solution: `btree minInBtree(btree bt) {\n    btree res = bt;\n    while (res->left) res = res->left;\n    return res;\n}` },
+          { id: "maxInBtree", category: "Alberi Binari (BTree)", name: "maxInBtree", signature: "btree maxInBtree(btree bt)", solution: `btree maxInBtree(btree bt) {\n    if (bt->right == NULL) return bt;\n    else return maxInBtree(bt->right);\n}` },
+          { id: "rightAncestor", category: "Alberi Binari (BTree)", name: "rightAncestor", signature: "btree rightAncestor(btree nd)", solution: `btree rightAncestor(btree nd) {\n    if (nd->parent == NULL) return NULL;\n    else if (nd == nd->parent->left) return nd->parent;\n    else return rightAncestor(nd->parent);\n}` },
+          { id: "leftAncestor", category: "Alberi Binari (BTree)", name: "leftAncestor", signature: "btree leftAncestor(btree node)", solution: `btree leftAncestor(btree node) {\n    if (node->parent == NULL) return NULL;\n    else if (node == node->parent->right) return node->parent;\n    else return leftAncestor(node->parent);\n}` },
+          { id: "successor", category: "Alberi Binari (BTree)", name: "successor", signature: "btree successor(btree nd)", solution: `btree successor(btree nd) {\n    if (nd->right == NULL) return rightAncestor(nd);\n    else return minInBtree(nd->right);\n}` },
+          { id: "predecessor", category: "Alberi Binari (BTree)", name: "predecessor", signature: "btree predecessor(btree node)", solution: `btree predecessor(btree node) {\n    if (node->left) return maxInBtree(node->left);\n    else return leftAncestor(node);\n}` },
+          { id: "antenatoComune", category: "Alberi Binari (BTree)", name: "antenatoComune", signature: "btree antenatoComune(btree bt, int a, int b)", solution: `btree antenatoComune(btree bt, int a, int b) {\n    if (bt == NULL) return NULL;\n    else if (bt->key >= a && bt->key <= b) return bt;\n    else if (bt->key < a) return antenatoComune(bt->right, a, b);\n    else return antenatoComune(bt->left, a, b);\n}` },
+          { id: "insertTree", category: "Alberi Binari (BTree)", name: "insertTree", signature: "btree insertTree(int k, btree bt)", solution: `btree insertTree(int k, btree bt) {\n    if (bt == NULL) return ConsTree(k, NULL, NULL);\n    else if (k == bt->key) return bt;\n    else if (k > bt->key) {\n        bt->right = insertTree(k, bt->right);\n        return bt;\n    } else {\n        bt->left = insertTree(k, bt->left);\n        return bt;\n    }\n}` },
+
+          // ==============================
+          // HEAP
+          // ==============================
+          { id: "insertHeapMin", category: "Heap", name: "insertHeapMin", signature: "bool insertHeapMin(Heap H, int k)", solution: `bool insertHeapMin(Heap H, int k) {\n    if (H->hd == H->dim) return false;\n    else {\n        H->keys[H->hd] = k;\n        H->hd++;\n        int i = H->hd - 1;\n        while (i > 0 && H->keys[i] < H->keys[parent(H, i)]) {\n            swap(H->keys, i, parent(H, i));\n            i = parent(H, i);\n        }\n        return true;\n    }\n}` },
+          { id: "maxHeapify", category: "Heap", name: "maxHeapify", signature: "void maxHeapify(int H[], int i, int hd)", solution: `void maxHeapify(int H[], int i, int hd) {\n    int leftindex = left(i, hd);\n    int rightindex = right(i, hd);\n    int max = i;\n    if (leftindex != i && H[leftindex] > H[max]) max = leftindex;\n    if (rightindex != i && H[rightindex] > H[max]) max = rightindex;\n    if (max != i) {\n        swap(H, i, max);\n        maxHeapify(H, max, hd);\n    }\n}` },
+          { id: "buildMaxHeap", category: "Heap", name: "buildMaxHeap", signature: "void buildMaxHeap(int A[], int dim)", solution: `void buildMaxHeap(int A[], int dim) {\n    int m = dim / 2 + 1;\n    for (int i = m; i >= 0; i--) {\n        maxHeapify(A, i, dim);\n    }\n}` },
+          { id: "heapSort", category: "Heap", name: "heapSort", signature: "void heapSort(int A[], int dim)", solution: `void heapSort(int A[], int dim) {\n    buildMaxHeap(A, dim - 1);\n    for (int i = dim - 1; i > 0; i--) {\n        swap(A, 0, i);\n        maxHeapify(A, 0, i - 1);\n    }\n}` },
+          { id: "decreaseKey", category: "Heap", name: "decreaseKey", signature: "void decreaseKey(Heap H, int i, int newKey)", solution: `void decreaseKey(Heap H, int i, int newKey) {\n    H->keys[i] = newKey;\n    int par = parent(H, i);\n    if (par != i && H->keys[i] < H->keys[par]) {\n        swap(H, i, par);\n        decreaseKey(H, par, H->keys[par]);\n    }\n}` },
+
+          // ==============================
+          // TABELLE HASH
+          // ==============================
+          { id: "hashInsert", category: "Tabelle Hash", name: "hashInsert", signature: "void hashInsert(HashTable T, int k)", solution: `void hashInsert(HashTable T, int k) {\n    int pos = hashFun(k, T->dim);\n    T->array[pos] = ordInsert(k, NULL, T->array[pos]);\n}` },
+          { id: "hashInsertLinear", category: "Tabelle Hash", name: "hashInsertLinear", signature: "int hashInsertLinear(HashTable T, int k)", solution: `int hashInsertLinear(HashTable T, int k) {\n    for (int i = 0; i < T->dim; i++) {\n        int pos = linearProbing(k, i, T->dim);\n        if (T->array[pos] == -1) {\n            T->array[pos] = k;\n            return pos;\n        } else if (T->array[pos] == k) return -1;\n    }\n    return -2;\n}` },
+          { id: "hashSearch", category: "Tabelle Hash", name: "hashSearch", signature: "int hashSearch(HashTable T, int k)", solution: `int hashSearch(HashTable T, int k) {\n    for (int i = 0; i < T->dim; i++) {\n        int pos = linearProbing(k, i, T->dim);\n        if (T->array[pos] == k) return k;\n        else if (T->array[pos] == -1) return -1;\n    }\n    return -2;\n}` },
+
+          // ==============================
+          // MATEMATICA & DP
+          // ==============================
+          { id: "distance", category: "Matematica & DP", name: "Edit Distance", signature: "Matrix distance(char* X, char* Y)", solution: `Matrix distance(char* X, char* Y) {\n    int m = strlen(X);\n    int n = strlen(Y);\n    Matrix D = newMatrix(m + 1, n + 1);\n    for (int i = 0; i <= m; i++) D->array[i][0] = i;\n    for (int j = 0; j <= n; j++) D->array[0][j] = j;\n    for (int i = 1; i <= m; i++)\n        for (int j = 1; j <= n; j++)\n            if (X[i - 1] == Y[j - 1])\n                D->array[i][j] = D->array[i - 1][j - 1];\n            else\n                D->array[i][j] = 1 + min(D->array[i][j - 1], min(D->array[i - 1][j], D->array[i - 1][j - 1]));\n    return D;\n}` },
+          { id: "binomialRec", category: "Matematica & DP", name: "binomialRec", signature: "int binomialRec(int n, int k)", solution: `int binomialRec(int n, int k) {\n    if (k == 0 || n == k) return 1;\n    else return binomialRec(n - 1, k - 1) + binomialRec(n - 1, k);\n}` },
+          { id: "binomialBottUp", category: "Matematica & DP", name: "binomialBottUp", signature: "int binomialBottUp(int n, int k)", solution: `int binomialBottUp(int n, int k) {\n    int mat[n + 1][k + 1];\n    for (int i = 0; i < n + 1; i++) {\n        for (int j = 0; j < k + 1; j++) {\n            if (j == 0 || j == i) mat[i][j] = 1;\n            else mat[i][j] = -1;\n        }\n    }\n    for (int i = 0; i < n + 1; i++) {\n        for (int j = 0; j < k + 1; j++) {\n            if (j != 0 && j != i)\n                mat[i][j] = mat[i - 1][j - 1] + mat[i - 1][j];\n        }\n    }\n    return mat[n][k];\n}` },
+          { id: "binomialNoMem", category: "Matematica & DP", name: "binomialNoMem", signature: "int binomialNoMem(int n, int k)", solution: `int binomialNoMem(int n, int k) {\n    int res = 0;\n    for (int i = 0; i < k + 1; i++) {\n        if (i == 0 || n == i) res += 1;\n        else res = (res * (n - i + 1)) / i;\n    }\n    return res;\n}` },
+          { id: "expRic", category: "Matematica & DP", name: "expRic", signature: "int expRic(int x, int n)", solution: `int expRic(int x, int n) {\n    if (n == 0) return 1;\n    if (n % 2 == 0) {\n        int half = expRic(x, n / 2);\n        return half * half;\n    } else {\n        return x * expRic(x, n - 1);\n    }\n}` },
+          { id: "expIter", category: "Matematica & DP", name: "expIter", signature: "int expIter(int x, int n)", solution: `int expIter(int x, int n) {\n    int z = 1;\n    while (n > 0) {\n        if (n % 2 == 1) z = z * x;\n        x = x * x;\n        n = n / 2;\n    }\n    return z;\n}` }
         ];
 
         const CodeWorkspace = ({ algorithm, userCode, onChange, readOnly = false, showSolutionToggle = true }) => {
@@ -141,33 +197,25 @@
         };
 
         function App() {
-          const [appMode, setAppMode] = useState('practice'); // 'practice', 'quiz-setup', 'quiz-active', 'quiz-summary'
-          
+          const [appMode, setAppMode] = useState('practice');
           const [userCodes, setUserCodes] = useState({});
           const [selectedAlgo, setSelectedAlgo] = useState(algorithmsData[0]);
-
           const [quizQuestions, setQuizQuestions] = useState([]);
           const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
           const [timeElapsed, setTimeElapsed] = useState(0);
           const timerRef = useRef(null);
 
-          // Caricamento Dati al mount
           useEffect(() => {
             try {
               const saved = localStorage.getItem('algoUserCodes');
               if (saved) setUserCodes(JSON.parse(saved));
-            } catch(e) {
-              console.warn("LocalStorage non disponibile");
-            }
+            } catch(e) {}
           }, []);
 
-          // Salvataggio automatico del codice
           const handleCodeChange = (algoId, value) => {
             const newCodes = { ...userCodes, [algoId]: value };
             setUserCodes(newCodes);
-            try {
-              localStorage.setItem('algoUserCodes', JSON.stringify(newCodes));
-            } catch(e) {}
+            try { localStorage.setItem('algoUserCodes', JSON.stringify(newCodes)); } catch(e) {}
           };
 
           const startQuiz = (numQuestions) => {
@@ -176,11 +224,8 @@
             setCurrentQuizIndex(0);
             setTimeElapsed(0);
             setAppMode('quiz-active');
-            
             if (timerRef.current) clearInterval(timerRef.current);
-            timerRef.current = setInterval(() => {
-              setTimeElapsed(prev => prev + 1);
-            }, 1000);
+            timerRef.current = setInterval(() => setTimeElapsed(prev => prev + 1), 1000);
           };
 
           const endQuiz = () => {
@@ -194,46 +239,61 @@
             return `${m}:${s}`;
           };
 
-          const renderPracticeMode = () => (
-            <div className="flex h-full gap-6">
-              <div className="w-80 bg-slate-900 rounded-lg border border-slate-800 flex flex-col overflow-hidden shadow-lg shrink-0">
-                <div className="p-4 bg-slate-900 border-b border-slate-800 shadow-sm z-10 flex items-center justify-between">
-                  <div>
-                      <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wider">Libreria Algoritmi</h2>
-                      <p className="text-xs text-slate-500 mt-1">{algorithmsData.length} funzioni</p>
+          const renderPracticeMode = () => {
+            const grouped = algorithmsData.reduce((acc, algo) => {
+              if (!acc[algo.category]) acc[algo.category] = [];
+              acc[algo.category].push(algo);
+              return acc;
+            }, {});
+
+            return (
+              <div className="flex h-full gap-6">
+                <div className="w-80 bg-slate-900 rounded-lg border border-slate-800 flex flex-col overflow-hidden shadow-lg shrink-0">
+                  <div className="p-4 bg-slate-900 border-b border-slate-800 shadow-sm z-10 flex items-center justify-between">
+                    <div>
+                        <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wider">Libreria Algoritmi</h2>
+                        <p className="text-xs text-slate-500 mt-1">{algorithmsData.length} funzioni in {Object.keys(grouped).length} categorie</p>
+                    </div>
+                    <i className="fas fa-layer-group text-slate-600 text-xl"></i>
                   </div>
-                  <i className="fas fa-layer-group text-slate-600 text-xl"></i>
+                  <div className="flex-1 overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-slate-700">
+                    {Object.entries(grouped).map(([category, algos]) => (
+                      <div key={category} className="mb-4 last:mb-0">
+                        <div className="px-3 py-1.5 mb-1 text-xs font-bold text-slate-500 uppercase tracking-widest sticky top-0 bg-slate-900/95 backdrop-blur-sm z-10 border-b border-slate-800/50">
+                          {category}
+                        </div>
+                        {algos.map(algo => {
+                          const isSelected = selectedAlgo?.id === algo.id;
+                          const hasCode = userCodes[algo.id] && userCodes[algo.id].trim().length > 0;
+                          return (
+                            <button
+                              key={algo.id}
+                              onClick={() => setSelectedAlgo(algo)}
+                              className={`w-full text-left px-4 py-2 mb-0.5 rounded-md text-sm transition-all duration-200 truncate flex items-center justify-between group outline-none ${
+                                isSelected 
+                                  ? 'bg-indigo-600 text-white font-medium shadow-md' 
+                                  : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                              }`}
+                            >
+                              <span className="truncate">{algo.name}</span>
+                              {hasCode && !isSelected && <div className="w-2 h-2 rounded-full bg-emerald-500 opacity-50 group-hover:opacity-100 transition-opacity" title="Codice salvato"></div>}
+                              {hasCode && isSelected && <div className="w-2 h-2 rounded-full bg-white shadow-sm" title="Codice salvato"></div>}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="flex-1 overflow-y-auto p-2">
-                  {algorithmsData.map(algo => {
-                    const isSelected = selectedAlgo?.id === algo.id;
-                    const hasCode = userCodes[algo.id] && userCodes[algo.id].trim().length > 0;
-                    return (
-                      <button
-                        key={algo.id}
-                        onClick={() => setSelectedAlgo(algo)}
-                        className={`w-full text-left px-4 py-3 mb-1 rounded-md text-sm transition-all duration-200 truncate flex items-center justify-between group outline-none ${
-                          isSelected 
-                            ? 'bg-indigo-600 text-white font-medium shadow-md' 
-                            : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                        }`}
-                      >
-                        <span className="truncate">{algo.name}</span>
-                        {hasCode && !isSelected && <div className="w-2 h-2 rounded-full bg-emerald-500 opacity-50 group-hover:opacity-100 transition-opacity" title="Codice salvato"></div>}
-                        {hasCode && isSelected && <div className="w-2 h-2 rounded-full bg-white shadow-sm" title="Codice salvato"></div>}
-                      </button>
-                    )
-                  })}
-                </div>
+                
+                <CodeWorkspace 
+                  algorithm={selectedAlgo} 
+                  userCode={userCodes[selectedAlgo?.id] || `// Implementa ${selectedAlgo?.name} qui...\n\n`} 
+                  onChange={(val) => handleCodeChange(selectedAlgo.id, val)}
+                />
               </div>
-              
-              <CodeWorkspace 
-                algorithm={selectedAlgo} 
-                userCode={userCodes[selectedAlgo?.id] || `// Implementa ${selectedAlgo?.name} qui...\n\n`} 
-                onChange={(val) => handleCodeChange(selectedAlgo.id, val)}
-              />
-            </div>
-          );
+            );
+          };
 
           const renderQuizSetup = () => (
             <div className="flex-1 flex items-center justify-center">
@@ -272,7 +332,6 @@
 
           const renderQuizActive = () => {
             const currentAlgo = quizQuestions[currentQuizIndex];
-            
             return (
               <div className="flex flex-col h-full gap-4">
                 <div className="bg-slate-900 rounded-lg p-4 border border-slate-800 flex items-center justify-between shadow-md">
@@ -281,36 +340,30 @@
                       Domanda {currentQuizIndex + 1} di {quizQuestions.length}
                     </div>
                   </div>
-                  
                   <div className="text-xl font-mono font-bold text-emerald-400 bg-slate-950 px-5 py-2 rounded-lg border border-slate-800 shadow-inner tracking-widest flex items-center gap-2">
                     <i className="fas fa-clock text-slate-500 text-sm"></i> {formatTime(timeElapsed)}
                   </div>
-                  
                   <div className="flex items-center gap-3">
                     <button 
                       onClick={() => setCurrentQuizIndex(prev => Math.max(0, prev - 1))}
                       disabled={currentQuizIndex === 0}
-                      className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 disabled:opacity-30 disabled:hover:bg-slate-800 text-white rounded-md text-sm transition-colors font-medium border border-slate-700 outline-none"
+                      className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 disabled:opacity-30 text-white rounded-md text-sm font-medium border border-slate-700"
                     >
                       <i className="fas fa-chevron-left"></i> Prec
                     </button>
                     <button 
                       onClick={() => setCurrentQuizIndex(prev => Math.min(quizQuestions.length - 1, prev + 1))}
                       disabled={currentQuizIndex === quizQuestions.length - 1}
-                      className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 disabled:opacity-30 disabled:hover:bg-slate-800 text-white rounded-md text-sm transition-colors font-medium border border-slate-700 outline-none"
+                      className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 disabled:opacity-30 text-white rounded-md text-sm font-medium border border-slate-700"
                     >
                       Succ <i className="fas fa-chevron-right"></i>
                     </button>
                     <div className="w-px h-8 bg-slate-700 mx-2"></div>
-                    <button 
-                      onClick={endQuiz}
-                      className="flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-md text-sm transition-colors font-bold shadow-md shadow-rose-900/20 outline-none"
-                    >
+                    <button onClick={endQuiz} className="flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-md text-sm font-bold shadow-md shadow-rose-900/20">
                       <i className="fas fa-stop-circle"></i> Termina Test
                     </button>
                   </div>
                 </div>
-
                 <CodeWorkspace 
                   algorithm={currentAlgo} 
                   userCode={userCodes[currentAlgo?.id] || `// Domanda ${currentQuizIndex + 1}: ${currentAlgo?.name}\n\n`} 
@@ -332,16 +385,15 @@
                   </div>
                   <button 
                     onClick={() => { setAppMode('practice'); setSelectedAlgo(algorithmsData[0]); }}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-md font-bold transition-colors border border-slate-700 shadow-sm outline-none"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-md font-bold transition-colors border border-slate-700 shadow-sm"
                   >
                     <i className="fas fa-rotate-left"></i> Torna alla Practice
                   </button>
                 </div>
-
                 <div className="flex-1 bg-slate-900 rounded-lg border border-slate-800 flex flex-col overflow-hidden shadow-lg">
                   <div className="p-4 bg-slate-900 border-b border-slate-800 shadow-sm z-10">
                     <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wider">Riepilogo Domande</h2>
-                    <p className="text-xs text-slate-500 mt-1">Clicca per revisionare e confrontare le soluzioni</p>
+                    <p className="text-xs text-slate-500 mt-1">Clicca per revisionare e confrontare</p>
                   </div>
                   <div className="flex-1 overflow-y-auto p-2">
                     {quizQuestions.map((algo, idx) => {
@@ -351,14 +403,10 @@
                           key={algo.id}
                           onClick={() => setSelectedAlgo(algo)}
                           className={`w-full text-left px-4 py-3 mb-1 rounded-md text-sm transition-all duration-200 truncate flex items-center gap-3 outline-none ${
-                            isSelected 
-                              ? 'bg-slate-700 text-white font-medium border border-slate-600 shadow-inner' 
-                              : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
+                            isSelected ? 'bg-slate-700 text-white font-medium border border-slate-600 shadow-inner' : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
                           }`}
                         >
-                          <span className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${isSelected ? 'bg-indigo-500 text-white' : 'bg-slate-800 text-slate-400 border border-slate-700'}`}>
-                            {idx + 1}
-                          </span>
+                          <span className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${isSelected ? 'bg-indigo-500 text-white' : 'bg-slate-800 text-slate-400 border border-slate-700'}`}>{idx + 1}</span>
                           <span className="truncate">{algo.name}</span>
                         </button>
                       )
@@ -366,7 +414,6 @@
                   </div>
                 </div>
               </div>
-
               <CodeWorkspace 
                 algorithm={selectedAlgo || quizQuestions[0]} 
                 userCode={userCodes[selectedAlgo?.id || quizQuestions[0]?.id] || '// Nessun codice inserito'} 
@@ -383,37 +430,25 @@
                   <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-emerald-500 rounded-lg flex items-center justify-center shadow-lg text-white font-bold text-xl">
                     <i className="fas fa-code"></i>
                   </div>
-                  <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-emerald-400 tracking-tight">
-                    AlgoTrainer
-                  </h1>
+                  <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-emerald-400 tracking-tight">AlgoTrainer</h1>
                 </div>
-                
                 {appMode !== 'quiz-active' && (
                   <nav className="flex items-center gap-2 bg-slate-950 p-1.5 rounded-lg border border-slate-800">
                     <button 
                       onClick={() => { setAppMode('practice'); if(!selectedAlgo) setSelectedAlgo(algorithmsData[0]); }}
-                      className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-bold transition-all duration-200 outline-none ${
-                        appMode === 'practice' 
-                          ? 'bg-slate-800 text-indigo-400 shadow-md border border-slate-700/50' 
-                          : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-                      }`}
+                      className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-bold transition-all duration-200 outline-none ${appMode === 'practice' ? 'bg-slate-800 text-indigo-400 shadow-md border border-slate-700/50' : 'text-slate-400 hover:text-white hover:bg-slate-800/50'}`}
                     >
                       <i className="fas fa-book-open"></i> Practice Mode
                     </button>
                     <button 
                       onClick={() => setAppMode('quiz-setup')}
-                      className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-bold transition-all duration-200 outline-none ${
-                        appMode.startsWith('quiz') 
-                          ? 'bg-slate-800 text-emerald-400 shadow-md border border-slate-700/50' 
-                          : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-                      }`}
+                      className={`flex items-center gap-2 px-5 py-2 rounded-md text-sm font-bold transition-all duration-200 outline-none ${appMode.startsWith('quiz') ? 'bg-slate-800 text-emerald-400 shadow-md border border-slate-700/50' : 'text-slate-400 hover:text-white hover:bg-slate-800/50'}`}
                     >
                       <i className="fas fa-stopwatch"></i> Test Mode
                     </button>
                   </nav>
                 )}
               </header>
-
               <main className="flex-1 overflow-hidden">
                 {appMode === 'practice' && renderPracticeMode()}
                 {appMode === 'quiz-setup' && renderQuizSetup()}
@@ -424,7 +459,6 @@
           );
         }
 
-        // Avvio di React nel browser
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
